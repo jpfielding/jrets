@@ -52,6 +52,7 @@ public class StreamingSearchResultProcessor implements SearchResultProcessor {
 		this.mTimeout = timeout;
 	}
 
+	/** how to deal with badly delimited data */
 	public void setCompactRowPolicy(CompactRowPolicy badRowPolicy) {
 		this.mCompactRowPolicy = badRowPolicy;
 	}
