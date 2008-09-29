@@ -29,19 +29,24 @@ public class SearchResultHandler implements ContentHandler, ErrorHandler{
 	private StringBuffer currentEntry;
 	private String delimiter;
 	private Locator locator;
-	private int columnCount;
+	private String[] columns;
 	private InvalidReplyCodeHandler invalidReplyCodeHandler;
+	private CompactRowPolicy compactRowPolicy;
 
 	public SearchResultHandler(SearchResultCollector r) {
-		this(r, InvalidReplyCodeHandler.FAIL);
+		this(r, InvalidReplyCodeHandler.FAIL, CompactRowPolicy.DEFAULT);
 	}
 
-	public SearchResultHandler(SearchResultCollector r, InvalidReplyCodeHandler invalidReplyCodeHandler) {
+	public SearchResultHandler(SearchResultCollector r, InvalidReplyCodeHandler invalidReplyCodeHandler, CompactRowPolicy badRowPolicy) {
+		this.compactRowPolicy = badRowPolicy;
 		if (r == null)
 			throw new NullPointerException("SearchResultCollector must not be null");
 
 		if (invalidReplyCodeHandler == null)
 			throw new NullPointerException("InvalidReplyCodeHandler must not be null");
+
+		if (badRowPolicy == null)
+			throw new NullPointerException("BadRowPolicy must not be null");
 
 		this.collector = r;
 		this.dataCount = 0;
@@ -165,16 +170,12 @@ public class SearchResultHandler implements ContentHandler, ErrorHandler{
 			String[] contents = split(this.currentEntry.toString());
 			if (name.equals("COLUMNS")) {
 				this.collector.setColumns(contents);
-				this.columnCount = contents.length;
+				this.columns = contents;
 			} else {
-				if (contents.length > this.columnCount) {
-					throw new SAXParseException(String.format("Invalid number of result columns: got %s, expected %s",contents.length, this.columnCount), this.locator);
+				if( this.compactRowPolicy.apply(this.dataCount, this.columns, contents) ) {
+					this.dataCount++;
+					this.collector.addRow(contents);
 				}
-				this.dataCount++;
-				if (contents.length < this.columnCount) {
-					LOG.warn(String.format("Row %s: Invalid number of result columns:  got %s, expected ",this.dataCount, contents.length)+ this.columnCount);
-				}
-				this.collector.addRow(contents);
 			}
 			this.currentEntry = null;
 		}

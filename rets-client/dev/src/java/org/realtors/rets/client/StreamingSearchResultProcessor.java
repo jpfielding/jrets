@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.util.LinkedList;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
+import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
 
 /**
@@ -16,6 +17,7 @@ public class StreamingSearchResultProcessor implements SearchResultProcessor {
 	private final int mBufferSize;
 	private final int mTimeout;
 	private InvalidReplyCodeHandler mInvalidReplyCodeHandler;
+	private CompactRowPolicy mCompactRowPolicy;
 
 	/**
 	 * Construct a StreamingSearchResultProcessor.
@@ -50,6 +52,16 @@ public class StreamingSearchResultProcessor implements SearchResultProcessor {
 		this.mTimeout = timeout;
 	}
 
+	public void setCompactRowPolicy(CompactRowPolicy badRowPolicy) {
+		this.mCompactRowPolicy = badRowPolicy;
+	}
+
+	private CompactRowPolicy getCompactRowPolicy() {
+		if (this.mCompactRowPolicy == null)
+			return CompactRowPolicy.DEFAULT;
+		return this.mCompactRowPolicy;
+	}
+
 	public void setInvalidRelyCodeHandler(InvalidReplyCodeHandler invalidReplyCodeHandler) {
 		this.mInvalidReplyCodeHandler = invalidReplyCodeHandler;
 	}
@@ -70,7 +82,7 @@ public class StreamingSearchResultProcessor implements SearchResultProcessor {
 
 	public SearchResultSet parse(InputSource source) {
 		StreamingSearchResult result = new StreamingSearchResult(this.mBufferSize, this.mTimeout);
-		StreamingThread thread = new StreamingThread(source, result, this.getInvalidRelyCodeHandler());
+		StreamingThread thread = new StreamingThread(source, result, this.getInvalidRelyCodeHandler(), this.getCompactRowPolicy());
 		thread.start();
 		return result;
 	}
@@ -81,16 +93,18 @@ class StreamingThread extends Thread {
 	private StreamingSearchResult mResult;
 	private InputSource mSource;
 	private InvalidReplyCodeHandler mInvalidReplyCodeHandler;
+	private CompactRowPolicy badRowPolicy;
 
-	public StreamingThread(InputSource source, StreamingSearchResult result,InvalidReplyCodeHandler invalidReplyCodeHandler) {
+	public StreamingThread(InputSource source, StreamingSearchResult result,InvalidReplyCodeHandler invalidReplyCodeHandler, CompactRowPolicy badRowPolicy) {
 		this.mSource = source;
 		this.mResult = result;
 		this.mInvalidReplyCodeHandler = invalidReplyCodeHandler;
+		this.badRowPolicy = badRowPolicy;
 	}
 
 	@Override
 	public void run() {
-		SearchResultHandler handler = new SearchResultHandler(this.mResult, this.mInvalidReplyCodeHandler);
+		SearchResultHandler handler = new SearchResultHandler(this.mResult, this.mInvalidReplyCodeHandler, this.badRowPolicy);
 		try {
 			handler.parse(this.mSource);
 		} catch (RetsException e) {
@@ -137,7 +151,14 @@ class StreamingSearchResult implements SearchResultSet, SearchResultCollector {
 
 	// ------------ Producer Methods
 
-	public synchronized void addRow(String[] row) {
+	public synchronized boolean addRow(String[] row) {
+		if (row.length > this.columns.length) {
+			throw new IllegalArgumentException(String.format("Invalid number of result columns: got %s, expected %s",row.length, this.columns.length));
+		}
+		if (row.length < this.columns.length) {
+			LogFactory.getLog(SearchResultCollector.class).warn(String.format("Row %s: Invalid number of result columns:  got %s, expected ",this.count, row.length, this.columns.length));
+		}
+
 		if (state() > BUFFER_FULL) {
 			if (this.exception == null)
 				setException(new RetsException("Attempting to add rows to buffer when in complete state"));
@@ -164,6 +185,7 @@ class StreamingSearchResult implements SearchResultSet, SearchResultCollector {
 			pushState(BUFFER_AVAILABLE);
 
 		this.notifyAll();
+		return true;
 	}
 
 	public synchronized void setComplete() {

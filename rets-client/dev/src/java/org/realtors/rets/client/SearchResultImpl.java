@@ -1,9 +1,11 @@
 package org.realtors.rets.client;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+
+import org.apache.commons.logging.LogFactory;
 
 public class SearchResultImpl implements SearchResult, SearchResultCollector {
 
@@ -39,8 +41,14 @@ public class SearchResultImpl implements SearchResult, SearchResultCollector {
 		return this.columnNames;
 	}
 
-	public void addRow(String[] row) {
-		this.rows.add(row);
+	public boolean addRow(String[] row) {
+		if (row.length > this.columnNames.length) {
+			throw new IllegalArgumentException(String.format("Invalid number of result columns: got %s, expected %s",row.length, this.columnNames.length));
+		}
+		if (row.length < this.columnNames.length) {
+			LogFactory.getLog(SearchResultCollector.class).warn(String.format("Row %s: Invalid number of result columns:  got %s, expected ",this.rows.size(), row.length, this.columnNames.length));
+		}
+		return this.rows.add(row);
 	}
 
 	public String[] getRow(int idx) {

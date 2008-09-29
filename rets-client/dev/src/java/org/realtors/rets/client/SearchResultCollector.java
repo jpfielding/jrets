@@ -6,7 +6,7 @@ public interface SearchResultCollector {
 
 	public void setColumns(String[] columns);
 
-	public void addRow(String[] row);
+	public boolean addRow(String[] row);
 
 	public void setMaxrows();
 
