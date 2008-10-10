@@ -1,31 +1,30 @@
 package org.realtors.rets.client;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 public class RetsVersion implements Serializable {
-	private static Map mMap = new HashMap();
-	public static final RetsVersion RETS_10 = new RetsVersion(1, 0);
-	public static final RetsVersion RETS_15 = new RetsVersion(1, 5);
-	public static final RetsVersion RETS_16 = new RetsVersion(1, 6);
-	public static final RetsVersion RETS_17 = new RetsVersion(1, 7);
-	public static final RetsVersion DEFAULT = RETS_15;
 	public static final String RETS_VERSION_HEADER = "RETS-Version";
+
+	public static final RetsVersion RETS_10 = new RetsVersion(1, 0, 0);
+	public static final RetsVersion RETS_15 = new RetsVersion(1, 5, 0);
+	public static final RetsVersion RETS_16 = new RetsVersion(1, 6, 0);
+	public static final RetsVersion RETS_17 = new RetsVersion(1, 7, 0);
+	public static final RetsVersion DEFAULT = RETS_15;
 
 	private int mMajor;
 	private int mMinor;
 	private int mDraft;
 
 	public RetsVersion(int major, int minor) {
-		this(major, minor, 0);
+		this(major,minor,0);
 	}
-
 	public RetsVersion(int major, int minor, int draft) {
 		this.mMajor = major;
 		this.mMinor = minor;
 		this.mDraft = draft;
-		mMap.put(this.toString(), this);
 	}
 
 	public int getMajor() {
@@ -60,7 +59,11 @@ public class RetsVersion implements Serializable {
 	}
 
 	public static RetsVersion getVersion(String ver) {
-		return (RetsVersion) mMap.get(ver);
+		String[] split = StringUtils.trimToEmpty(ver).split("\\.");
+		int ma = NumberUtils.toInt(split[0],1);
+		int mn = split.length > 1 ? NumberUtils.toInt(split[1],0) : 0; 
+		int dr = split.length > 2 ? NumberUtils.toInt(split[2],0) : 0;
+		return new RetsVersion(ma,mn,dr);
 	}
 
 }
