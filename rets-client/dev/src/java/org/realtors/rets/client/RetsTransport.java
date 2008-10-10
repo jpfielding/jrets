@@ -100,7 +100,7 @@ public class RetsTransport {
 
 	/**
 	 * Set our RetsHttpClient up with the correct default RETS version to use,
-	 * default to RETS 1.0.
+	 * default to RETS 1.5.
 	 * @param retsVersion 
 	 */
 	private void doVersionHeader(RetsVersion retsVersion) {
@@ -174,11 +174,12 @@ public class RetsTransport {
 		RetsHttpResponse retsHttpResponse = this.doRequest(req);
 
 		String versionHeader = retsHttpResponse.getHeader(RetsVersion.RETS_VERSION_HEADER);
-		// may be null, which is fine, just default it, dont throw 
+		// may be null, which is fine, return null, dont throw 
 		RetsVersion retsVersion = RetsVersion.getVersion(versionHeader);
 		if( retsVersion == null && this.strict ) 
 			throw new RetsException(String.format("RETS Version is a required response header, version '%s' is unrecognized",versionHeader));
-		this.doVersionHeader(retsVersion);
+		// skip updating the client version if its not set (correctly) by the server
+		if( retsVersion != null ) this.doVersionHeader(retsVersion);
 
 		LoginResponse response = new LoginResponse(this.capabilities.getLoginUrl());
 

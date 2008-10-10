@@ -59,6 +59,7 @@ public class RetsVersion implements Serializable {
 	}
 
 	public static RetsVersion getVersion(String ver) {
+		if( StringUtils.isEmpty(ver) ) return null;
 		String[] split = StringUtils.trimToEmpty(ver).split("\\.");
 		int ma = NumberUtils.toInt(split[0],1);
 		int mn = split.length > 1 ? NumberUtils.toInt(split[1],0) : 0; 
