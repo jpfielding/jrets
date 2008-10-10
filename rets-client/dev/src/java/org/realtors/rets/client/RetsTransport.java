@@ -175,7 +175,10 @@ public class RetsTransport {
 
 		String versionHeader = retsHttpResponse.getHeader(RetsVersion.RETS_VERSION_HEADER);
 		// may be null, which is fine, just default it, dont throw 
-		this.doVersionHeader(RetsVersion.getVersion(versionHeader));
+		RetsVersion retsVersion = RetsVersion.getVersion(versionHeader);
+		if( retsVersion == null && this.strict ) 
+			throw new RetsException(String.format("RETS Version is a required response header, version '%s' is unrecognized",versionHeader));
+		this.doVersionHeader(retsVersion);
 
 		LoginResponse response = new LoginResponse(this.capabilities.getLoginUrl());
 
