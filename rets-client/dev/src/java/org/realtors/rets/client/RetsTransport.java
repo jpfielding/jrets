@@ -112,18 +112,6 @@ public class RetsTransport {
 		this.client.addDefaultHeader(RetsVersion.RETS_VERSION_HEADER, this.version.toString());
 	}
 
-	private void doVersionHeader(String versionHeader) throws RetsException {
-		if (versionHeader == null) {
-			this.doVersionHeader(RetsVersion.RETS_10);
-			return;
-		}
-		RetsVersion retsVersion = RetsVersion.getVersion(versionHeader);
-		if (retsVersion == null) {
-			throw new RetsException("Unknown Server RETS Version: " + versionHeader);
-		}
-		this.doVersionHeader(retsVersion);
-	}
-
 	/**
 	 * replace the capabilities url list with a new one
 	 * @param capabilities the new capabilities url list
@@ -186,7 +174,8 @@ public class RetsTransport {
 		RetsHttpResponse retsHttpResponse = this.doRequest(req);
 
 		String versionHeader = retsHttpResponse.getHeader(RetsVersion.RETS_VERSION_HEADER);
-		this.doVersionHeader(versionHeader);
+		// may be null, which is fine, just default it, dont throw 
+		this.doVersionHeader(RetsVersion.getVersion(versionHeader));
 
 		LoginResponse response = new LoginResponse(this.capabilities.getLoginUrl());
 
