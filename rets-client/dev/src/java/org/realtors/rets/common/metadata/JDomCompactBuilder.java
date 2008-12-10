@@ -224,6 +224,7 @@ public class JDomCompactBuilder extends MetadataBuilder {
 
 	/** do NOT use string.split() unless your prepared to deal with loss due to token boundary conditions */
 	private String[] split(Element el) {
+		if( el == null ) return null;
 		final String delimiter = "\t";
 		StringTokenizer tkn = new StringTokenizer(el.getText(), delimiter, true);
 		List list = new LinkedList();
