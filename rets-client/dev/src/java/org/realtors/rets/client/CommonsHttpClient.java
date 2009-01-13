@@ -119,18 +119,16 @@ public class CommonsHttpClient extends RetsHttpClient {
 				}
 			}
 			
-			final Map<String, String> cookies = this.getCookies();
-
 			// optional ua-auth stuff here
 			if( this.userAgentPassword != null ){
-			    method.setRequestHeader(RETS_UA_AUTH_HEADER, this.calculateUaAuthHeader(method,cookies));
+			    method.setRequestHeader(RETS_UA_AUTH_HEADER, this.calculateUaAuthHeader(method,getCookies()));
 			}
 			// try to execute the request
 			final int responseCode = this.httpClient.executeMethod(method);
 			if (responseCode != HttpStatus.SC_OK) {
 				throw new InvalidHttpStatusException(responseCode, method.getStatusText());
 			}
-			return new CommonsHttpClientResponse(responseCode, method, cookies);
+			return new CommonsHttpClientResponse(responseCode, method, getCookies());
 		} catch (Exception e) {
 			throw new RetsException(e);
 		}
