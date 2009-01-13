@@ -9,7 +9,7 @@ package org.realtors.rets.common.metadata;
 
 public enum MetadataType {
     EDITMASK,
-    FOREIGNKEY,
+    FOREIGNKEYS,
     RESOURCE,
     LOOKUP,
     LOOKUP_TYPE,

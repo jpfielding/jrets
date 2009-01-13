@@ -148,7 +148,7 @@ public abstract class MetadataBuilder {
 		if (type == MetadataType.RESOURCE) {
 			return buildResource();
 		}
-		if (type == MetadataType.FOREIGNKEY) {
+		if (type == MetadataType.FOREIGNKEYS) {
 			return buildForeignKey();
 		}
 		if (type == MetadataType.CLASS) {

@@ -51,12 +51,12 @@ public class MSystem extends MetaObject {
 	}
 
 	public MForeignKey getMForeignKey(String foreignKeyID) {
-		return (MForeignKey) getChild(MetadataType.FOREIGNKEY, foreignKeyID);
+		return (MForeignKey) getChild(MetadataType.FOREIGNKEYS, foreignKeyID);
 	}
 
 	public MForeignKey[] getMForeignKeys() {
 		MForeignKey[] tmpl = new MForeignKey[0];
-		return (MForeignKey[]) getChildren(MetadataType.FOREIGNKEY).toArray(tmpl);
+		return (MForeignKey[]) getChildren(MetadataType.FOREIGNKEYS).toArray(tmpl);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class MSystem extends MetaObject {
 		return null;
 	}
 
-	public static final MetadataType[] CHILDREN = { MetadataType.RESOURCE, MetadataType.FOREIGNKEY };
+	public static final MetadataType[] CHILDREN = { MetadataType.RESOURCE, MetadataType.FOREIGNKEYS };
 
 	@Override
 	protected void addAttributesToMap(Map attributeMap) {

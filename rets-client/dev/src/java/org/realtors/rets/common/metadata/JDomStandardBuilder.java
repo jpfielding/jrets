@@ -65,7 +65,7 @@ public class JDomStandardBuilder extends MetadataBuilder {
 	static {
 		sType2Element.put(MetadataType.SYSTEM, ELEMENT_SYSTEM);
 		sType2Element.put(MetadataType.RESOURCE, ELEMENT_RESOURCE);
-		sType2Element.put(MetadataType.FOREIGNKEY, ELEMENT_FOREIGNKEY);
+		sType2Element.put(MetadataType.FOREIGNKEYS, ELEMENT_FOREIGNKEY);
 		sType2Element.put(MetadataType.CLASS, ELEMENT_CLASS);
 		sType2Element.put(MetadataType.TABLE, ELEMENT_TABLE);
 		sType2Element.put(MetadataType.UPDATE, ELEMENT_UPDATE);
@@ -525,7 +525,7 @@ public class JDomStandardBuilder extends MetadataBuilder {
 			Element element = (Element) fkeys.get(i);
 			MForeignKey foreignKey = buildForeignKey();
 			setAttributes(foreignKey, element);
-			system.addChild(MetadataType.FOREIGNKEY, foreignKey);
+			system.addChild(MetadataType.FOREIGNKEYS, foreignKey);
 		}
 	}
 
@@ -582,8 +582,8 @@ public class JDomStandardBuilder extends MetadataBuilder {
 		 METADATA-FOREIGN_KEY.
 		 I think I'm going to be sick.
 		 */
-		sContainer2Type.remove(CONTAINER_PREFIX + MetadataType.FOREIGNKEY.name());
-		sContainer2Type.put(CONTAINER_FOREIGNKEY, MetadataType.FOREIGNKEY);
+		sContainer2Type.remove(CONTAINER_PREFIX + MetadataType.FOREIGNKEYS.name());
+		sContainer2Type.put(CONTAINER_FOREIGNKEY, MetadataType.FOREIGNKEYS);
 	}
 
 }
