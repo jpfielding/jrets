@@ -18,6 +18,7 @@ import org.realtors.rets.common.metadata.attrib.AttrAlphanum;
 import org.realtors.rets.common.metadata.attrib.AttrBoolean;
 import org.realtors.rets.common.metadata.attrib.AttrDate;
 import org.realtors.rets.common.metadata.attrib.AttrNumeric;
+import org.realtors.rets.common.metadata.attrib.AttrNumericPositive;
 import org.realtors.rets.common.metadata.attrib.AttrPlaintext;
 import org.realtors.rets.common.metadata.attrib.AttrText;
 import org.realtors.rets.common.metadata.attrib.AttrVersion;
@@ -48,10 +49,14 @@ public abstract class MetaObject implements Serializable {
 	protected static final AttrType sAttrBoolean = new AttrBoolean();
 	protected static final AttrType sAttrDate = new AttrDate();
 	protected static final AttrType sAttrNumeric = new AttrNumeric();
+	protected static final AttrType sAttrNumericPositive = new AttrNumericPositive();
 	protected static final AttrType sAttrVersion = new AttrVersion();
 	protected static final AttrType sAttrMetadataEntryId = sAlphanum32;
 	protected static final MetadataType[] sNoChildren = new MetadataType[0];
 
+	protected static final AttrType retsid = sAlphanum32;
+	protected static final AttrType retsname = sAlphanum64;
+	
 	public static final boolean STRICT_PARSING = true;
 	public static final boolean LOOSE_PARSING = false;
 	public static final boolean DEFAULT_PARSING = LOOSE_PARSING;

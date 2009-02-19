@@ -33,6 +33,11 @@ public class MTable extends MetaObject {
 	public static final String REQUIRED = "Required";
 	public static final String SEARCHHELPID = "SearchHelpID";
 	public static final String UNIQUE = "Unique";
+	public static final String MODTIMESTAMP = "ModTimeStamp";
+	public static final String FOREIGNKEYNAME = "ForeignKeyName";
+	public static final String FOREIGNFIELD = "ForeignField";
+	public static final String INKEYINDEX = "InKeyIndex";
+	
 	private static final String[] DATATYPES = "Boolean,Character,Date,DateTime,Time,Tiny,Small,Int,Long,Decimal".split(",");
 	private static final AttrType sDataTypes = new AttrEnum(DATATYPES);
 	private static final String[] INTERPRETATIONS = "Number,Currency,Lookup,LookupMulti,LookupBitstring,LookupBitmask".split(",");
@@ -158,6 +163,14 @@ public class MTable extends MetaObject {
 		return getBooleanAttribute(UNIQUE);
 	}
 
+	public boolean getModTimestamp() {
+		return getBooleanAttribute(MODTIMESTAMP);
+	}
+
+	public boolean getInKeyIndex() {
+		return getBooleanAttribute(INKEYINDEX);
+	}
+
 	@Override
 	public MetadataType[] getChildTypes() {
 		return sNoChildren;
@@ -170,30 +183,36 @@ public class MTable extends MetaObject {
 
 	@Override
 	protected void addAttributesToMap(Map attributeMap) {
-		attributeMap.put(METADATAENTRYID, sAttrMetadataEntryId);
-		attributeMap.put(SYSTEMNAME, sAlphanum32);
-		attributeMap.put(STANDARDNAME, sText);
+		attributeMap.put(METADATAENTRYID, retsid);
+		attributeMap.put(SYSTEMNAME, retsname);
+		attributeMap.put(STANDARDNAME, retsname);
 		attributeMap.put(LONGNAME, sText256);
-		attributeMap.put(DBNAME, sAlphanum);
+		attributeMap.put(DBNAME, sAlphanum10);
 		attributeMap.put(SHORTNAME, sText64);
-		attributeMap.put(MAXIMUMLENGTH, sAttrNumeric);
+		attributeMap.put(MAXIMUMLENGTH, sAttrNumericPositive);
 		attributeMap.put(DATATYPE, sDataTypes);
 		attributeMap.put(PRECISION, sAttrNumeric);
 		attributeMap.put(SEARCHABLE, sAttrBoolean);
 		attributeMap.put(INTERPRETATION, sInterpretations);
 		attributeMap.put(ALIGNMENT, sAlignments);
 		attributeMap.put(USESEPARATOR, sAttrBoolean);
-		attributeMap.put(EDITMASKID, sAlphanum32); // XXX: but multiples are separated by commas
-		attributeMap.put(LOOKUPNAME, sAlphanum32);
+		// XXX: but multiples are separated by commas
+		attributeMap.put(EDITMASKID, retsname); 
+		attributeMap.put(LOOKUPNAME, retsname);
 		attributeMap.put(MAXSELECT, sAttrNumeric);
 		attributeMap.put(UNITS, sUnits);
 		attributeMap.put(INDEX, sAttrNumeric);
 		attributeMap.put(MINIMUM, sAttrNumeric);
 		attributeMap.put(MAXIMUM, sAttrNumeric);
-		attributeMap.put(DEFAULT, sAttrNumeric); // XXX: serial
+		// XXX: serial
+		attributeMap.put(DEFAULT, sAttrNumeric); 
 		attributeMap.put(REQUIRED, sAttrNumeric);
-		attributeMap.put(SEARCHHELPID, sAlphanum32);
+		attributeMap.put(SEARCHHELPID, retsname);
 		attributeMap.put(UNIQUE, sAttrBoolean);
+		attributeMap.put(MODTIMESTAMP, sAttrBoolean);
+		attributeMap.put(FOREIGNKEYNAME,retsid);
+		attributeMap.put(FOREIGNFIELD,retsname);
+		attributeMap.put(INKEYINDEX, sAttrBoolean);
 	}
 
 }
