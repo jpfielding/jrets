@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.lang.StringUtils;
+
 public class GetObjectResponseIterator<T extends SingleObjectResponse> implements GetObjectIterator<T> {
 	public static final char CR = '\r';
 	public static final char LF = '\n';
@@ -91,7 +93,7 @@ public class GetObjectResponseIterator<T extends SingleObjectResponse> implement
 	private T getNext() throws Exception {
 		Map headers = new HashMap();
 		String header = null;
-		while (!(header = this.readLine()).equals("")) {
+		while (StringUtils.isNotEmpty(header = this.readLine())) {
 			int nvSeperatorIndex = header.indexOf(':');
 			if (nvSeperatorIndex == -1)
 				throw new IllegalArgumentException("No header name value seperator found for header: " + header);
