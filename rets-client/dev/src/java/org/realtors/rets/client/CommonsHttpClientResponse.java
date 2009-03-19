@@ -9,12 +9,9 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.realtors.rets.common.util.CaseInsensitiveTreeMap;
 
 public class CommonsHttpClientResponse implements RetsHttpResponse {
-	private static final Log WIRE_LOG = WireLogInputStream.getWireLog();
-
 	private int responseCode;
 	private HttpMethod method;
 	private Map<String,String> headers;
@@ -59,8 +56,6 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 			String contentEncoding = StringUtils.trimToEmpty(this.getHeader(CommonsHttpClient.CONTENT_ENCODING)).toLowerCase();
 			boolean gzipped = ArrayUtils.contains(CommonsHttpClient.DEFLATE_ENCODINGS.split(","),contentEncoding);
 			if( gzipped ) inputStream = new GZIPInputStream(inputStream);
-			// wire logging
-			if( WIRE_LOG.isDebugEnabled() ) inputStream = new WireLogInputStream(inputStream);
 			
 			final InputStream in = inputStream;
 			// the http method close wrapper (necessary)

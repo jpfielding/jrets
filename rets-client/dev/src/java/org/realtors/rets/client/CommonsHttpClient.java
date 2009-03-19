@@ -1,5 +1,6 @@
 package org.realtors.rets.client;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,18 +18,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
 import org.realtors.rets.common.util.CaseInsensitiveTreeMap;
 
-/** 
- * Requires http-client > 3.0 
- * 
- * provides:
- * -multithreaded access to a session
- * -gzip aware downloads
- * -digest auth caching (only functional when qop and nc are not honored)
- * -rets-ua-auth
- */
 public class CommonsHttpClient extends RetsHttpClient {
 	private static final int DEFAULT_TIMEOUT = 300000;
 	private static final String RETS_VERSION = "RETS-Version";
@@ -39,8 +30,6 @@ public class CommonsHttpClient extends RetsHttpClient {
 	private static final String ACCEPT_ENCODING = "Accept-Encoding";
 	public static final String CONTENT_ENCODING = "Content-Encoding";
 	public static final String DEFLATE_ENCODINGS = "gzip,deflate";
-	
-	private static final Log WIRE_LOG = WireLogInputStream.getWireLog();
 	
 	private final ConcurrentHashMap<String, String> defaultHeaders;
 	private final HttpClient httpClient;
@@ -89,7 +78,6 @@ public class CommonsHttpClient extends RetsHttpClient {
 			url = url + "?" + args;
 		}
 		HttpMethod method = new GetMethod(url);
-		WIRE_LOG.debug(String.format("\n>>>\nGET %s",url));
 		return execute(method, request.getHeaders());
 	}
 
@@ -98,9 +86,12 @@ public class CommonsHttpClient extends RetsHttpClient {
 		String body = request.getHttpParameters();
 		if (body == null) body = "";  // commons-httpclient 3.0 refuses to accept null entity (body)
 		PostMethod method = new PostMethod(url);
-		method.setRequestEntity(new StringRequestEntity(body));
+		try {
+			method.setRequestEntity(new StringRequestEntity(body, null, null));
+		} catch (UnsupportedEncodingException e) {
+			throw new RetsException(e);
+		}
 		method.setRequestHeader("Content-Type", "application/x-www-url-encoded");
-		WIRE_LOG.debug(String.format("\n>>>\nPOST %s\nArgs: %s",url,body));
 		return execute(method, request.getHeaders());
 	}
 
