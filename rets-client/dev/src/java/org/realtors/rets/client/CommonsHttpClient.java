@@ -48,8 +48,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 		this.httpClient = new HttpClient(multiThreadedHttpConnectionManager);
 		// ask the server if we can use gzip
 		if( gzip ) this.addDefaultHeader(ACCEPT_ENCODING, DEFLATE_ENCODINGS);
-		// timeouts
-		this.httpClient.getParams().setConnectionManagerTimeout(timeout);
+		// connection to server timeouts
 		this.httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(timeout);
 		this.httpClient.getParams().setSoTimeout(timeout);
 		// set to rfc 2109 as it puts the ASP (IIS) cookie _FIRST_, this is critical for interealty
