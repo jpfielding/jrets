@@ -94,7 +94,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 		return execute(method, request.getHeaders());
 	}
 
-	private RetsHttpResponse execute(final HttpMethod method, Map<String,String> headers) throws RetsException {
+	protected RetsHttpResponse execute(final HttpMethod method, Map<String,String> headers) throws RetsException {
 		try {
 			// add the default headers
 			if (this.defaultHeaders != null) {
@@ -130,7 +130,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 		if( value == null ) this.defaultHeaders.remove(key);
 	}
 	
-	private Map<String,String> getCookies() {
+	protected Map<String,String> getCookies() {
 		Map<String,String> cookieMap = new CaseInsensitiveTreeMap();
 		for (Cookie cookie : this.httpClient.getState().getCookies()) {
 			cookieMap.put(cookie.getName(), cookie.getValue());
@@ -138,7 +138,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 		return cookieMap;
 	}
 
-	private String calculateUaAuthHeader(HttpMethod method, Map<String, String> cookies ) {
+	protected String calculateUaAuthHeader(HttpMethod method, Map<String, String> cookies ) {
 		final String userAgent = this.getHeaderValue(method, USER_AGENT);
 		final String requestId = this.getHeaderValue(method, RETS_REQUEST_ID);
 		final String sessionId = cookies.get(RETS_SESSION_ID);
@@ -148,7 +148,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 		return String.format("Digest %s", DigestUtils.md5Hex(pieces));
 	}
 	
-    private String getHeaderValue(HttpMethod method, String key){
+	protected String getHeaderValue(HttpMethod method, String key){
     	Header requestHeader = method.getRequestHeader(key);
     	if( requestHeader == null ) return null;
 		return requestHeader.getValue();
