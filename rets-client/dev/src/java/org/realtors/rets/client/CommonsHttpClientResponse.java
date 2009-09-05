@@ -47,6 +47,14 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 		return this.cookies.get(cookie);
 	}
 
+	public String getCharset() {
+		String contentType = StringUtils.trimToEmpty(this.getHeader(CommonsHttpClient.CONTENT_TYPE)).toLowerCase();
+		String[] split = StringUtils.split(contentType, ";");
+		if (split == null) return null;
+		for (String s : split) if (s.toLowerCase().startsWith("charset=")) return StringUtils.substringAfter(s, "charset=");
+		return null;
+	}
+
 	/**  using this mess to provide logging, gzipping and httpmethod closing */
 	public InputStream getInputStream() throws RetsException {
 		try {

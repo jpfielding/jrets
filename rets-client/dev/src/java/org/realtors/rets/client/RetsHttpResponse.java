@@ -12,6 +12,8 @@ public interface RetsHttpResponse {
 
 	public String getCookie(String cookie) throws RetsException;
 
+	public String getCharset() throws RetsException;
+	
 	public InputStream getInputStream() throws RetsException;
 
 	public Map getCookies() throws RetsException;

@@ -30,6 +30,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 	private static final String ACCEPT_ENCODING = "Accept-Encoding";
 	public static final String CONTENT_ENCODING = "Content-Encoding";
 	public static final String DEFLATE_ENCODINGS = "gzip,deflate";
+	public static final String CONTENT_TYPE = "Content-Type";
 	
 	private final ConcurrentHashMap<String, String> defaultHeaders;
 	private final HttpClient httpClient;

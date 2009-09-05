@@ -26,15 +26,14 @@ public class RetsTransport {
 	private boolean strict;
 	private NetworkEventMonitor monitor;
 
-	private static Map MONITOR_MSGS = new HashMap();
-	static {
-		MONITOR_MSGS.put(ChangePasswordRequest.class, "Transmitting change password request");
-		MONITOR_MSGS.put(GetObjectRequest.class, "Retrieving media object");
-		MONITOR_MSGS.put(LoginRequest.class, "Logging in");
-		MONITOR_MSGS.put(GetMetadataRequest.class, "Retrieving metadata");
-		MONITOR_MSGS.put(LogoutRequest.class, "Logging out");
-		MONITOR_MSGS.put(SearchRequest.class, "Executing search");
-	}
+	private static Map MONITOR_MSGS = new HashMap(){{
+		put(ChangePasswordRequest.class, "Transmitting change password request");
+		put(GetObjectRequest.class, "Retrieving media object");
+		put(LoginRequest.class, "Logging in");
+		put(GetMetadataRequest.class, "Retrieving metadata");
+		put(LogoutRequest.class, "Logging out");
+		put(SearchRequest.class, "Executing search");
+	}};
 
 
 	/**
