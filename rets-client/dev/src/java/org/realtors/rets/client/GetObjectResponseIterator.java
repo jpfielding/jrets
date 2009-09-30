@@ -95,13 +95,13 @@ public class GetObjectResponseIterator<T extends SingleObjectResponse> implement
 		String header = null;
 		while (StringUtils.isNotEmpty(header = this.readLine())) {
 			int nvSeperatorIndex = header.indexOf(':');
-			if (nvSeperatorIndex == -1)
-				throw new IllegalArgumentException("No header name value seperator found for header: " + header);
-
-			String name = header.substring(0, nvSeperatorIndex);
-			String value = header.substring(nvSeperatorIndex + 1).trim();
-			headers.put(name, value);
-
+			if (nvSeperatorIndex == -1){
+				headers.put(header, "");
+			} else {
+				String name = header.substring(0, nvSeperatorIndex);
+				String value = header.substring(nvSeperatorIndex + 1).trim();
+				headers.put(name, value);
+			}
 		}
 		return (T)new SingleObjectResponse(headers, new SinglePartInputStream(this.multipartStream, BS+this.boundary));
 	}
