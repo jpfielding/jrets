@@ -1,0 +1,29 @@
+Provides java support for the Real Estate Transaction Standard.
+
+This project is a continuation of the CART RETS client. While no releases have been prepared for cart for some time, it has been continually maintained via it's HEAD branch. The HEAD branch was ported into this project.
+
+It is currently in use with ALL major MLS vendors and many minor ones. It also currently connects well with the Avantia Reference implementation and the Variman RETS server.
+
+Quick Start Guide:
+
+        RetsSession session = new RetsSession("http://retsserver.com/loginurl");
+        // login
+        session.login("username","password");
+        // metadata (simple default to standard xml)
+        session.getMetadata();
+        // metadata request
+        GetMetadataRequest request = new GetMetadataRequest("SYSTEM", "*");
+        this.format.setMetadataResultFormat(request);
+        MetaObject[] metadata = session.getMetadata(request).getMetadata();
+        if(metadata.length != 1 || !(metadata[0] instanceof MSystem))
+                throw new IllegalArgumentException("1 MetaObject of type MSystem was expected.");
+        MSystem system = (MSystem) metadata[0];
+        Metadata metadata = new Metadata(system);
+        // search 
+        session.search(new SearchRequest("Property","Residential","(ListingStatus=|A)"));
+        // getobject ALL
+        session.getObject("Property", "Photo", "MLNUM-10009", "*");
+        // getobject MAIN
+        session.getObject("Property", "Photo", "MLNUM-10009", "0");
+
+Ecilpse project setup allows the addition of this project under eclipse and immediate use under eclipses tools.   Ant build files exist for generating the jars for inclusion in other projects.
