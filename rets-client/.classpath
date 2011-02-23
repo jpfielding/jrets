@@ -11,7 +11,7 @@
 	<classpathentry exported="false" kind="lib" path="dev/lib/commons-lang-2.4.jar" sourcepath="docs/lib/commons-lang-2.4-sources.zip"/>
 	<classpathentry exported="false" kind="lib" path="dev/lib/commons-logging-1.1.1.jar" sourcepath="docs/lib/commons-logging-1.1.1-sources.jar"/>
 	<classpathentry exported="false" kind="lib" path="dev/lib/commons-pool-1.4.jar" sourcepath="docs/lib/commons-pool-1.4-sources.jar"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/guava-r06.jar" sourcepath="docs/lib/guava-src-r06.zip"/>
+	<classpathentry exported="false" kind="lib" path="dev/lib/guava-r08.jar" sourcepath="docs/lib/guava-src-r08.zip"/>
 	<classpathentry exported="false" kind="lib" path="dev/lib/jakarta-poi-2.5.1.jar" sourcepath="docs/lib/jakarta-poi-2.5.1-src.zip"/>
 	<classpathentry exported="false" kind="lib" path="dev/lib/jdom-1.1.jar" sourcepath="docs/lib/jdom-1.1-sources.zip"/>
 	<classpathentry exported="false" kind="lib" path="dev/lib/joda-time-1.6.jar" sourcepath="docs/lib/joda-time-1.6-sources.jar"/>
