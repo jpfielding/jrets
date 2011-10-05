@@ -21,9 +21,9 @@ Quick Start Guide:
         Metadata metadata = new Metadata(system);
         // search 
         session.search(new SearchRequest("Property","Residential","(ListingStatus=|A)"));
+        // getobject MAIN (calling iterator should also work, as this allows a single style regardless of params)
+        GetObjectResponse gor = session.getObject("Property", "Photo", "MLNUM-10009", "0");
         // getobject ALL
-        session.getObject("Property", "Photo", "MLNUM-10009", "*");
-        // getobject MAIN
-        session.getObject("Property", "Photo", "MLNUM-10009", "0");
+        Iterator<SingleObjectResponse> i = session.getObject("Property", "Photo", "MLNUM-10009", "*").iterator();
 
 Ecilpse project setup allows the addition of this project under eclipse and immediate use under eclipses tools.   Ant build files exist for generating the jars for inclusion in other projects.
