@@ -1,15 +1,19 @@
 package org.realtors.rets.retsexplorer.login;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 
 import org.realtors.rets.client.RetsSession;
 import org.realtors.rets.retsexplorer.retstabbedpane.RetsView;
 import org.realtors.rets.retsexplorer.util.GuiUtils;
+import org.realtors.rets.retsexplorer.util.QueryManager;
 import org.realtors.rets.retsexplorer.util.RetsWorker;
 import org.realtors.rets.retsexplorer.wirelog.WireLogConsole;
 import org.realtors.rets.retsexplorer.wirelog.WireLogConsoleOutputStream;
@@ -23,22 +27,28 @@ public class SourceSplitView extends JSplitPane {
 	private RetsView retsView;
 	private JButton loginSuccess = new JButton();
 	private String sourceName;
+	private final QueryManager qm;
 	
-	public SourceSplitView(List<RetsClientConfig> retsConfigs, ActionListener loginSuccess) {
+	public SourceSplitView(QueryManager qm, List<RetsClientConfig> retsConfigs, ActionListener loginSuccess, Map<String, Component> components) {
+		this.qm = qm;
 		this.loginSuccess.addActionListener(loginSuccess);
 		this.loginView = new LoginView(retsConfigs);
 		setLoginButtonActionListener();
 		this.console = new WireLogConsole();
-//		JTabbedPane bottomTabbedPane = new JTabbedPane();
-//		bottomTabbedPane.add(this.console, "Console");
-//		bottomTabbedPane.add(this.console, "Some Other View");
 		
 		this.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.setDoubleBuffered(true);
 		this.setTopComponent(this.loginView);
-//		this.setBottomComponent(bottomTabbedPane);
-		//XXX when this is released publicly, uncommenting this line, and commenting the one above will remove the matcher and code generation from display
-		this.setBottomComponent(this.console); 
+		if (components.isEmpty()) {
+			this.setBottomComponent(this.console); 
+		} else {
+			JTabbedPane bottomTabbedPane = new JTabbedPane();
+			bottomTabbedPane.add(this.console, "Console");
+			for (String title : components.keySet()){
+				bottomTabbedPane.add(components.get(title), title);
+			}
+			this.setBottomComponent(bottomTabbedPane);
+		}
 		this.setDividerLocation(.6);
 	}
 	
@@ -74,7 +84,7 @@ public class SourceSplitView extends JSplitPane {
 							return null;
 						}
 					});
-					SourceSplitView.this.retsView = new RetsView(retsConfig, client, SourceSplitView.this.console);
+					SourceSplitView.this.retsView = new RetsView(SourceSplitView.this.qm, retsConfig, client, SourceSplitView.this.console);
 				} catch (Exception e) {
 					setSourceName("login");
 					GuiUtils.exceptionPopup("Error Attempting to Login", e);

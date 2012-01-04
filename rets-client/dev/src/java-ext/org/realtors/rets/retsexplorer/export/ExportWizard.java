@@ -239,6 +239,7 @@ public class ExportWizard extends JDialog {
 						}
 					}
 
+					@SuppressWarnings("deprecation")
 					@Override
 					protected Boolean doInBackgroundWithPopup() {
 						try {

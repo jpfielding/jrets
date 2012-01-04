@@ -10,9 +10,9 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
-import org.realtors.rets.retsexplorer.RetsExplorer;
 import org.realtors.rets.retsexplorer.login.MainTabbedPane;
 
 
@@ -27,7 +27,7 @@ public class GuiKeyBindings {
 		};
 	}
 	
-	public static void setCloseTabAction(final MainTabbedPane tabbedPane, final RetsExplorer frameToClose){
+	public static void setCloseTabAction(final MainTabbedPane tabbedPane, final JFrame frameToClose){
 		ActionMap actionMap = tabbedPane.getActionMap();
 		InputMap inputMap = tabbedPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, mask), "close");

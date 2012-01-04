@@ -43,9 +43,9 @@ import org.realtors.rets.common.metadata.Metadata;
 import org.realtors.rets.common.metadata.types.MObject;
 import org.realtors.rets.common.metadata.types.MResource;
 import org.realtors.rets.common.metadata.types.MSystem;
+import org.realtors.rets.retsexplorer.SampleConfigs;
 import org.realtors.rets.retsexplorer.util.ErrorPopupActionListener;
 import org.realtors.rets.retsexplorer.util.GuiKeyBindings;
-import org.realtors.rets.retsexplorer.util.RetsSource;
 import org.realtors.rets.retsexplorer.util.RetsWorker;
 import org.realtors.rets.retsexplorer.wirelog.WireLogConsole;
 import org.realtors.rets.util.RetsClient;
@@ -591,11 +591,8 @@ public class RetsObjectsFrameOperator {
 		}
 	}
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		RetsClientConfig config = RetsSource.get("TAAR").getConfig();
+		RetsClientConfig config = new RetsClientConfig(SampleConfigs.taar(),"TAAR");
 		RetsClient client = config.createClient();
 		Metadata metadata = client.getMetadata();
 		

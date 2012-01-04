@@ -37,6 +37,7 @@ import org.realtors.rets.retsexplorer.export.Exportable;
 import org.realtors.rets.retsexplorer.export.Exporter;
 import org.realtors.rets.retsexplorer.util.ErrorPopupActionListener;
 import org.realtors.rets.retsexplorer.util.GuiUtils;
+import org.realtors.rets.retsexplorer.util.QueryManager;
 import org.realtors.rets.retsexplorer.wirelog.WireLogConsole;
 import org.realtors.rets.retsexplorer.wirelog.WireLoggedRetsClient;
 import org.realtors.rets.util.ResourceClass;
@@ -59,14 +60,16 @@ public class RetsView extends JPanel implements Exportable {
 	private SelectorPanel selectorObject;
 
 	private Map<String, RetsSourceTabbedPane> mclassTableCache;
+	private final QueryManager qm;
 	
 	WireLogConsole wireLogConsole;
 	
-	public RetsView(final RetsClientConfig config) {
-		this(config, null, null);
+	public RetsView(QueryManager qm, final RetsClientConfig config) {
+		this(qm, config, null, null);
 	}
 	
-	public RetsView(final RetsClientConfig config, RetsClient client, WireLogConsole console){
+	public RetsView(QueryManager qm, final RetsClientConfig config, RetsClient client, WireLogConsole console){
+		this.qm = qm;
 		this.wireLogConsole = console;
 		this.mclassTableCache = Maps.newHashMap();
 		setConfig(config);
@@ -252,7 +255,7 @@ public class RetsView extends JPanel implements Exportable {
 	
 	private RetsSourceTabbedPane createRetsTabbePane(ResourceClass resourceClass) throws Exception {
 		MTable[] mtables = new GetFields(resourceClass).execute(getMetadata());
-		return new RetsSourceTabbedPane(getConfig(), resourceClass, getClient(), getMetadata(), this.wireLogConsole, mtables);
+		return new RetsSourceTabbedPane(this.qm, getConfig(), resourceClass, getClient(), getMetadata(), this.wireLogConsole, mtables);
 	}
 	
 	

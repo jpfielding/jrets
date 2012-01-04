@@ -115,11 +115,11 @@ public class RetsSourceTabbedPane extends JTabbedPane implements Exportable {
 	private WireLogConsole wireLogConsole;
 
 
-	public RetsSourceTabbedPane(RetsClientConfig config, ResourceClass resourceClass) {
-		this(config, resourceClass, null, null, null, null, null, null);
+	public RetsSourceTabbedPane(QueryManager qm, RetsClientConfig config, ResourceClass resourceClass) {
+		this(qm, config, resourceClass, null, null, null, null, null, null);
 	}
 	
-	public RetsSourceTabbedPane(RetsClientConfig config, ResourceClass resourceClass, RetsClient client, Metadata metadata, WireLogConsole wireLogConsole, MTable... mTables) {
+	public RetsSourceTabbedPane(QueryManager qm, RetsClientConfig config, ResourceClass resourceClass, RetsClient client, Metadata metadata, WireLogConsole wireLogConsole, MTable... mTables) {
 		super();
 		this.wireLogConsole = wireLogConsole;
 		this.config = config;
@@ -137,7 +137,7 @@ public class RetsSourceTabbedPane extends JTabbedPane implements Exportable {
 		//initialize the search panel and triggers
 		final RetsSearchPane searchPanel = new RetsSearchPane();
 		searchPanel.getKeyFieldField().setText(getKeyField());
-		searchPanel.getQueryField().setText(QueryManager.createStatusQuery(getConfig().getRetsServiceName(), getResourceClass().getResource().getName(), getResourceClass().getClassName(), getMetadata(), "ListingStatus","Status","ModificationTimestamp","Name"));
+		searchPanel.getQueryField().setText(qm.createStatusQuery(getConfig().getRetsServiceName(), getResourceClass().getResource().getName(), getResourceClass().getClassName(), getMetadata(), "ListingStatus","Status","ModificationTimestamp","Name"));
 
 		final MetadataTable metaTable = new MetadataTable(getMetadata(), getMTables()); 
 		metaTable.setBackground(UIManager.getColor("Panel.background"));

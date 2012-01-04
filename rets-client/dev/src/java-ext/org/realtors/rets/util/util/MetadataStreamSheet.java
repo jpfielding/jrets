@@ -82,7 +82,7 @@ public class MetadataStreamSheet {
 		// a header style
 		HSSFCellStyle style = wb.createCellStyle();
 		HSSFFont font = wb.createFont();
-		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		font.setBoldweight(org.apache.poi.ss.usermodel.Font.BOLDWEIGHT_BOLD);
 		style.setFont(font);
 		
 		// add the header
@@ -119,7 +119,7 @@ public class MetadataStreamSheet {
 		    // a header style
 			HSSFCellStyle style = wb.createCellStyle();
 			HSSFFont font = wb.createFont();
-			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			font.setBoldweight(org.apache.poi.ss.usermodel.Font.BOLDWEIGHT_BOLD);
 			style.setFont(font);
 			
 			// add the header
@@ -143,7 +143,7 @@ public class MetadataStreamSheet {
 		return StringUtils.abbreviate(name.replaceAll("\\/\\\\\\*\\?\\[\\]]", " "),31);
 	}
 
-	private void addColumn(short colCount, HSSFCellStyle style, HSSFRow row, String attrib) {
+	private void addColumn(int colCount, HSSFCellStyle style, HSSFRow row, String attrib) {
 		HSSFCell cell = row.createCell(colCount);
 		cell.setCellValue(attrib);
 		if( style != null ) cell.setCellStyle(style);
