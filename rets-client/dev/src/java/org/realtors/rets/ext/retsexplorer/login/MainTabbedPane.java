@@ -1,42 +1,37 @@
 package org.realtors.rets.ext.retsexplorer.login;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JTabbedPane;
 
 import org.realtors.rets.ext.retsexplorer.ProgressBarDialog;
+import org.realtors.rets.ext.retsexplorer.login.SourceSplitView.Custom;
 import org.realtors.rets.ext.retsexplorer.util.ButtonTabComponent;
 import org.realtors.rets.ext.retsexplorer.util.ErrorPopupActionListener;
 import org.realtors.rets.ext.retsexplorer.util.GuiKeyBindings;
 import org.realtors.rets.ext.retsexplorer.util.QueryManager;
 import org.realtors.rets.ext.util.RetsClientConfig;
 
-import com.google.common.collect.Maps;
-
 public class MainTabbedPane extends JTabbedPane {
 	private List<RetsClientConfig> retsConfigs;
 	private ActionListener closeTabActionListener = createCloseTabActionListener();
 	private QueryManager qm;
+	private final Custom customSourceComponents;
 	
-	public MainTabbedPane(QueryManager qm, List<RetsClientConfig> retsConfigs) {
+	public MainTabbedPane(QueryManager qm, List<RetsClientConfig> retsConfigs, Custom customSourceComponents) {
 		ProgressBarDialog.update(500,"Creating Initial Login Tab...");
 		this.qm = qm;
-		this.setDoubleBuffered(true);
 		this.retsConfigs = retsConfigs;
+		this.customSourceComponents = customSourceComponents;
+		this.setDoubleBuffered(true);
 		createTab();
 		GuiKeyBindings.setLoginAction(this); //TODO: shift this to a lower level
 	}
 	
-	protected Map<String, Component> supportTabs() {
-		return Maps.newHashMap();
-	}
-	
 	public void createTab() { //don't login with this, just create the new window
-		SourceSplitView splitPane = new SourceSplitView(this.qm, this.retsConfigs, loginSuccessActionListener(),supportTabs());
+		SourceSplitView splitPane = new SourceSplitView(this.qm, this.retsConfigs, loginSuccessActionListener(),this.customSourceComponents);
 		this.addTab("login", splitPane);
 	}
 	

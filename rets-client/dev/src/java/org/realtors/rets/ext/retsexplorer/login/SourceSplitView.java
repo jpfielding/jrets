@@ -22,15 +22,23 @@ import org.realtors.rets.ext.util.RetsClientConfig;
 import org.realtors.rets.ext.util.RetsTransaction;
 
 public class SourceSplitView extends JSplitPane {
+	public interface Custom {
+		Map<String, Component> components();
+		void initializeSupportComponents(RetsView view);
+		void updateSupportComponents(RetsClient client, RetsClientConfig retsConfig);
+	}
+	
 	private LoginView loginView;
 	private WireLogConsole console;
 	private RetsView retsView;
 	private JButton loginSuccess = new JButton();
 	private String sourceName;
 	private final QueryManager qm;
+	private final Custom custom;
 	
-	public SourceSplitView(QueryManager qm, List<RetsClientConfig> retsConfigs, ActionListener loginSuccess, Map<String, Component> components) {
+	public SourceSplitView(QueryManager qm, List<RetsClientConfig> retsConfigs, ActionListener loginSuccess, Custom custom) {
 		this.qm = qm;
+		this.custom = custom;
 		this.loginSuccess.addActionListener(loginSuccess);
 		this.loginView = new LoginView(retsConfigs);
 		setLoginButtonActionListener();
@@ -39,13 +47,13 @@ public class SourceSplitView extends JSplitPane {
 		this.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.setDoubleBuffered(true);
 		this.setTopComponent(this.loginView);
-		if (components.isEmpty()) {
+		if (custom.components().isEmpty()) {
 			this.setBottomComponent(this.console); 
 		} else {
 			JTabbedPane bottomTabbedPane = new JTabbedPane();
 			bottomTabbedPane.add(this.console, "Console");
-			for (String title : components.keySet()){
-				bottomTabbedPane.add(components.get(title), title);
+			for (String title : custom.components().keySet()){
+				bottomTabbedPane.add(custom.components().get(title), title);
 			}
 			this.setBottomComponent(bottomTabbedPane);
 		}
@@ -66,6 +74,7 @@ public class SourceSplitView extends JSplitPane {
 			this.setTopComponent(this.retsView);
 			this.setDividerLocation(.6);
 			this.loginSuccess.doClick(); //.....very sad hack...
+			this.custom.initializeSupportComponents(this.retsView);
 		}
 	}
 
@@ -85,6 +94,7 @@ public class SourceSplitView extends JSplitPane {
 						}
 					});
 					SourceSplitView.this.retsView = new RetsView(SourceSplitView.this.qm, retsConfig, client, SourceSplitView.this.console);
+					SourceSplitView.this.custom.updateSupportComponents(client, retsConfig);
 				} catch (Exception e) {
 					setSourceName("login");
 					GuiUtils.exceptionPopup("Error Attempting to Login", e);

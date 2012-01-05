@@ -32,10 +32,12 @@ import org.realtors.rets.ext.retsexplorer.export.Exportable;
 import org.realtors.rets.ext.retsexplorer.find.RetsSearchFactory;
 import org.realtors.rets.ext.retsexplorer.login.MainTabbedPane;
 import org.realtors.rets.ext.retsexplorer.login.SourceSplitView;
+import org.realtors.rets.ext.retsexplorer.login.SourceSplitView.Custom;
 import org.realtors.rets.ext.retsexplorer.retstabbedpane.RetsView;
 import org.realtors.rets.ext.retsexplorer.util.ErrorPopupActionListener;
 import org.realtors.rets.ext.retsexplorer.util.GuiKeyBindings;
 import org.realtors.rets.ext.retsexplorer.util.QueryManager;
+import org.realtors.rets.ext.util.RetsClient;
 import org.realtors.rets.ext.util.RetsClientConfig;
 
 import com.google.common.base.Function;
@@ -44,6 +46,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class RetsExplorer extends JFrame { 
 	
@@ -183,7 +186,17 @@ public class RetsExplorer extends JFrame {
 		final List<RetsClientConfig> configs = Lists.newArrayList();
 		configs.add(new RetsClientConfig(SampleConfigs.mris(),"MRIS"));
 		configs.add(new RetsClientConfig(SampleConfigs.taar(),"TAAR"));
-		return new MainTabbedPane(new SimpleQueryManager(), configs);
+		return new MainTabbedPane(new SimpleQueryManager(), configs, new Custom() {
+			public void updateSupportComponents(RetsClient client, RetsClientConfig retsConfig) {
+				// noop
+			}
+			public void initializeSupportComponents(RetsView view) {
+				// noop
+			}
+			public Map<String, Component> components() {
+				return Maps.newHashMap();
+			}
+		});
 	}
 
 	@SuppressWarnings("unused") 
