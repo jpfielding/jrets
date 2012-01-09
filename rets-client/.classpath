@@ -15,6 +15,7 @@
 	<classpathentry kind="lib" path="dev/lib/joda-time-2.0.jar" sourcepath="docs/lib/joda-time-2.0-sources.jar"/>
 	<classpathentry kind="lib" path="dev/lib/ext/junit-4.1.jar" sourcepath="docs/lib/junit-4.1-src.zip"/>
 	<classpathentry kind="lib" path="dev/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="dev/lib/ext/mockito-all-1.8.5.jar" sourcepath="docs/lib/mockito-all-1.8.5-sources.jar"/>
 	<classpathentry kind="lib" path="dev/lib/poi-3.7-20101029.jar"/>
 	<classpathentry kind="lib" path="dev/lib/swingx-1.0.jar" sourcepath="docs/lib/swingx-1.0-src.zip"/>
 	<classpathentry kind="lib" path="dev/lib/swingx-beaninfo-1.0.jar" sourcepath="docs/lib/swingx-1.0-src.zip"/>
