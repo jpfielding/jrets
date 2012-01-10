@@ -32,13 +32,15 @@ public abstract class SearchResultSetTable extends AbstractIterator<List<String>
 	public List<String> getColumnNames() {
         if(this.columns == null) {
             try {
-        	    this.columns = Arrays.asList(this.resultSet.getColumns());
+        	    this.columns = Lists.newArrayList();
+        	    String[] cols = this.resultSet.getColumns();
+				if (cols != null) this.columns.addAll(Arrays.asList(cols));
             } catch (RetsException e) {
     			retsException(e);
     			return EMPTY_COLUMNS;
             }
         }
-        return this.columns;
+        return Lists.newArrayList(this.columns);
     }
 
 	protected abstract void retsException(RetsException e);
@@ -60,7 +62,7 @@ public abstract class SearchResultSetTable extends AbstractIterator<List<String>
 			return computeNext();//Our policy didn't blow up, so recurse until a good row is found or we run out of rows!
 		} catch (RetsException e) {
 			retsException(e);
-			return endOfData();
+			return null;
 		}
 	}
 

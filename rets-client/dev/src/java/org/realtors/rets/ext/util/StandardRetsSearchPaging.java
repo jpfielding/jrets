@@ -104,6 +104,7 @@ public class StandardRetsSearchPaging extends AbstractIterator<Table> {
 				@Override
 				protected void retsException(RetsException e) {
 					Logger.getLogger(getClass()).debug("Table.close() of streaming rets search.");
+					this.close();
 				}
 			};
 		} catch(Exception e) {
@@ -155,7 +156,8 @@ class CompositeTable implements Table {
 		remove();
 	}
 	public List<String> getColumnNames() {
-		if (this.current == null && !hasNext()) 
+		if (this.current == null) this.hasNext();
+		if (this.current == null) 
 			throw new IllegalStateException("No metadata available");
 		return this.current.getColumnNames();
 	}
