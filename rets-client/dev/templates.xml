@@ -2,6 +2,19 @@
 
 <project name="templates" default="">
 	
+	<scriptdef name="substring" language="javascript">
+	     <attribute name="text" />
+	     <attribute name="start" />
+	     <attribute name="end" />
+	     <attribute name="property" />
+	     <![CDATA[
+	       var text = attributes.get("text");
+	       var start = attributes.get("start");
+	       var end = attributes.get("end") || text.length();
+	       project.setProperty(attributes.get("property"), text.substring(start, end));
+	     ]]>
+	</scriptdef>
+	
 	<macrodef name="import-deps">
 	    <attribute name="library"/>
 	    <attribute name="lib"/>
