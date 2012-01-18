@@ -29,7 +29,7 @@
 	<!-- git version info -->
 	<property prefix="git" file="../../.git/HEAD"/>
 	<basename file="${git.ref}" suffix="true" property="git.branch"/>
-	<loadfile srcfile="../../.git/refs/heads/${git.ref}" property="git.version"/>
+	<loadfile srcfile="../../.git/refs/heads/${git.branch}" property="git.version"/>
 	<substring text="${git.version}" start="0" end="7" property="git.version.abbrev" />
 
 	<!-- dist file version stamp -->
