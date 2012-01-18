@@ -69,6 +69,7 @@
 	            debug="on"
 				nowarn="true"
 	            deprecation="off"
+	        	includeantruntime="false"
 	            optimize="true">
 				<!-- setup classpath -->
 			    <classpath>
