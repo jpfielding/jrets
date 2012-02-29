@@ -5,9 +5,10 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.httpclient.HeaderElement;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.http.HeaderElement;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicHeaderValueParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -89,7 +90,7 @@ public class GetObjectResponse{
 
 	public String getBoundary() {
 		String contentTypeValue = getType();
-		HeaderElement[] contentType = HeaderElement.parseElements(contentTypeValue);
+		HeaderElement[] contentType = BasicHeaderValueParser.parseElements(contentTypeValue, new BasicHeaderValueParser());
 		if (contentType.length != 1)
 			throw new IllegalArgumentException("Multipart response appears to have a bad Content-Type: header value: "
 					+ contentTypeValue);

@@ -5,19 +5,24 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.realtors.rets.common.util.CaseInsensitiveTreeMap;
 
 public class CommonsHttpClient extends RetsHttpClient {
@@ -31,39 +36,56 @@ public class CommonsHttpClient extends RetsHttpClient {
 	public static final String CONTENT_ENCODING = "Content-Encoding";
 	public static final String DEFLATE_ENCODINGS = "gzip,deflate";
 	public static final String CONTENT_TYPE = "Content-Type";
-	
+
+	public static BasicHttpParams defaultParams(int timeout) {
+		BasicHttpParams httpClientParams = new BasicHttpParams();
+        // connection to server timeouts
+        HttpConnectionParams.setConnectionTimeout(httpClientParams, timeout);
+        HttpConnectionParams.setSoTimeout(httpClientParams, timeout);
+        // set to rfc 2109 as it puts the ASP (IIS) cookie _FIRST_, this is critical for interealty
+        httpClientParams.setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.RFC_2109);
+        return httpClientParams;
+	}
+	public static ThreadSafeClientConnManager defaultConnectionManager(int maxConnectionsPerRoute, int maxConnectionsTotal) {
+		// allows for multi threaded requests from a single client
+        ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager();
+        connectionManager.setDefaultMaxPerRoute(maxConnectionsPerRoute);
+        connectionManager.setMaxTotal(maxConnectionsTotal);
+        return connectionManager;
+	}
+
 	private final ConcurrentHashMap<String, String> defaultHeaders;
-	private final HttpClient httpClient;
+	private final DefaultHttpClient httpClient;
 	
 	// method choice improvement
 	private final String userAgentPassword;
 
 	public CommonsHttpClient() {
-		this(DEFAULT_TIMEOUT, null, true);
-	}
-	public CommonsHttpClient(int timeout, String userAgentPassword, boolean gzip) {
-		this.defaultHeaders = new ConcurrentHashMap<String, String>();
-		this.userAgentPassword = userAgentPassword;
-		MultiThreadedHttpConnectionManager multiThreadedHttpConnectionManager = new MultiThreadedHttpConnectionManager();
-		// allows for multi threaded requests from a single client
-		this.httpClient = new HttpClient(multiThreadedHttpConnectionManager);
-		// ask the server if we can use gzip
-		if( gzip ) this.addDefaultHeader(ACCEPT_ENCODING, DEFLATE_ENCODINGS);
-		// connection to server timeouts
-		this.httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(timeout);
-		this.httpClient.getParams().setSoTimeout(timeout);
-		// set to rfc 2109 as it puts the ASP (IIS) cookie _FIRST_, this is critical for interealty
-		this.httpClient.getParams().setCookiePolicy(CookiePolicy.RFC_2109);
+		this(new DefaultHttpClient(defaultConnectionManager(Integer.MAX_VALUE, Integer.MAX_VALUE), defaultParams(DEFAULT_TIMEOUT)), null, true);
 	}
 	
-	public HttpClient getHttpClient(){
+	public CommonsHttpClient(int timeout, String userAgentPassword, boolean gzip) {
+		this(new DefaultHttpClient(defaultConnectionManager(Integer.MAX_VALUE, Integer.MAX_VALUE), defaultParams(timeout)), userAgentPassword, gzip);
+	}
+	
+	public CommonsHttpClient(DefaultHttpClient client, String userAgentPassword, boolean gzip) {
+		this.defaultHeaders = new ConcurrentHashMap<String, String>();
+		this.userAgentPassword = userAgentPassword;
+
+        this.httpClient = client;
+		// ask the server if we can use gzip
+		if( gzip ) this.addDefaultHeader(ACCEPT_ENCODING, DEFLATE_ENCODINGS);
+	}
+	
+	public DefaultHttpClient getHttpClient(){
 		return this.httpClient;
 	}
 
 	//----------------------method implementations
  	@Override
 	public void setUserCredentials(String userName, String password) {
-		this.httpClient.getState().setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM, AuthScope.ANY_SCHEME), new UsernamePasswordCredentials(userName, password));
+		UsernamePasswordCredentials creds = new UsernamePasswordCredentials(userName, password);
+		this.httpClient.getCredentialsProvider().setCredentials(AuthScope.ANY, creds);
 	}
 	@Override
 	public RetsHttpResponse doRequest(String httpMethod, RetsHttpRequest request) throws RetsException {
@@ -77,7 +99,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 		if (args != null) {
 			url = url + "?" + args;
 		}
-		HttpMethod method = new GetMethod(url);
+		HttpGet method = new HttpGet(url);
 		return execute(method, request.getHeaders());
 	}
 
@@ -85,41 +107,42 @@ public class CommonsHttpClient extends RetsHttpClient {
 		String url = request.getUrl();
 		String body = request.getHttpParameters();
 		if (body == null) body = "";  // commons-httpclient 3.0 refuses to accept null entity (body)
-		PostMethod method = new PostMethod(url);
+		HttpPost method = new HttpPost(url);
 		try {
-			method.setRequestEntity(new StringRequestEntity(body, null, null));
+			method.setEntity(new StringEntity(body, null, null));
 		} catch (UnsupportedEncodingException e) {
 			throw new RetsException(e);
 		}
-		method.setRequestHeader("Content-Type", "application/x-www-url-encoded");
+		method.setHeader("Content-Type", "application/x-www-url-encoded");
 		return execute(method, request.getHeaders());
 	}
 
-	protected RetsHttpResponse execute(final HttpMethod method, Map<String,String> headers) throws RetsException {
+	protected RetsHttpResponse execute(final HttpRequestBase method, Map<String,String> headers) throws RetsException {
 		try {
 			// add the default headers
 			if (this.defaultHeaders != null) {
 				for (Map.Entry<String,String> entry : this.defaultHeaders.entrySet()) {
-					method.setRequestHeader(entry.getKey(), entry.getValue());
+					method.setHeader(entry.getKey(), entry.getValue());
 				}
 			}
 			// add our request headers from rets
 			if (headers != null) {
 				for (Map.Entry<String,String> entry : headers.entrySet()) {
-					method.setRequestHeader(entry.getKey(), entry.getValue());
+					method.setHeader(entry.getKey(), entry.getValue());
 				}
 			}
 			
 			// optional ua-auth stuff here
 			if( this.userAgentPassword != null ){
-			    method.setRequestHeader(RETS_UA_AUTH_HEADER, this.calculateUaAuthHeader(method,getCookies()));
+			    method.setHeader(RETS_UA_AUTH_HEADER, calculateUaAuthHeader(method,getCookies()));
 			}
 			// try to execute the request
-			final int responseCode = this.httpClient.executeMethod(method);
-			if (responseCode != HttpStatus.SC_OK) {
-				throw new InvalidHttpStatusException(responseCode, method.getStatusText());
+			HttpResponse response = this.httpClient.execute(method);
+			StatusLine status = response.getStatusLine();
+			if (status.getStatusCode() != HttpStatus.SC_OK) {
+				throw new InvalidHttpStatusException(status);
 			}
-			return new CommonsHttpClientResponse(responseCode, method, getCookies());
+			return new CommonsHttpClientResponse(response, getCookies());
 		} catch (Exception e) {
 			throw new RetsException(e);
 		}
@@ -133,13 +156,13 @@ public class CommonsHttpClient extends RetsHttpClient {
 	
 	protected Map<String,String> getCookies() {
 		Map<String,String> cookieMap = new CaseInsensitiveTreeMap();
-		for (Cookie cookie : this.httpClient.getState().getCookies()) {
+		for (Cookie cookie : this.httpClient.getCookieStore().getCookies()) {
 			cookieMap.put(cookie.getName(), cookie.getValue());
 		}
 		return cookieMap;
 	}
 
-	protected String calculateUaAuthHeader(HttpMethod method, Map<String, String> cookies ) {
+	protected String calculateUaAuthHeader(HttpRequestBase method, Map<String, String> cookies ) {
 		final String userAgent = this.getHeaderValue(method, USER_AGENT);
 		final String requestId = this.getHeaderValue(method, RETS_REQUEST_ID);
 		final String sessionId = cookies.get(RETS_SESSION_ID);
@@ -149,8 +172,8 @@ public class CommonsHttpClient extends RetsHttpClient {
 		return String.format("Digest %s", DigestUtils.md5Hex(pieces));
 	}
 	
-	protected String getHeaderValue(HttpMethod method, String key){
-    	Header requestHeader = method.getRequestHeader(key);
+	protected String getHeaderValue(HttpRequestBase method, String key){
+    	Header requestHeader = method.getFirstHeader(key);
     	if( requestHeader == null ) return null;
 		return requestHeader.getValue();
     }

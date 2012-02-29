@@ -1,12 +1,12 @@
 package org.realtors.rets.client;
 
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.http.StatusLine;
 
 public class InvalidHttpStatusException extends RetsException {
-	public InvalidHttpStatusException(int code) {
-		super("Status code (" + code + ") " + HttpStatus.getStatusText(code));
+	public InvalidHttpStatusException(StatusLine status) {
+		super("Status code (" + status.getStatusCode() + ") " + status.getReasonPhrase());
 	}
-	public InvalidHttpStatusException(int code, String message) {
-		super("Status code (" + code + ") " + HttpStatus.getStatusText(code) +" '"+message+"'");
+	public InvalidHttpStatusException(StatusLine status, String message) {
+		super("Status code (" + status.getStatusCode() + ") " + status.getReasonPhrase() +" '"+message+"'");
 	}
 }

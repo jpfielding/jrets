@@ -5,30 +5,31 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.realtors.rets.common.util.CaseInsensitiveTreeMap;
 
+import com.google.common.io.Closeables;
+
 public class CommonsHttpClientResponse implements RetsHttpResponse {
-	private int responseCode;
-	private HttpMethod method;
+	private HttpResponse response;
 	private Map<String,String> headers;
 	private Map<String,String> cookies;
 
-	public CommonsHttpClientResponse(int responseCode, HttpMethod method, Map<String,String> cookies) {
-		this.responseCode = responseCode;
-		this.method = method;
+	public CommonsHttpClientResponse(HttpResponse response, Map<String,String> cookies) {
+		this.response = response;
 		this.cookies = new CaseInsensitiveTreeMap<String,String>(cookies);
 
 		this.headers = new CaseInsensitiveTreeMap<String,String>();
-		for (Header header : this.method.getResponseHeaders()) 
+		for (Header header : this.response.getAllHeaders()) {
 			this.headers.put(header.getName(), header.getValue());
+		}
 	}
 
 	public int getResponseCode() {
-		return this.responseCode;
+		return this.response.getStatusLine().getStatusCode();
 	}
 
 	public Map<String,String> getHeaders() {
@@ -59,7 +60,7 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 	public InputStream getInputStream() throws RetsException {
 		try {
 			// get our underlying stream
-			InputStream inputStream = this.method.getResponseBodyAsStream();
+			InputStream inputStream = this.response.getEntity().getContent();
 			// gzipped aware checks
 			String contentEncoding = StringUtils.trimToEmpty(this.getHeader(CommonsHttpClient.CONTENT_ENCODING)).toLowerCase();
 			boolean gzipped = ArrayUtils.contains(CommonsHttpClient.DEFLATE_ENCODINGS.split(","),contentEncoding);
@@ -83,7 +84,7 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 				@Override
 				public void close() throws IOException {
 					// connection release _AFTER_ the input stream has been read
-					CommonsHttpClientResponse.this.method.releaseConnection();
+					Closeables.closeQuietly(in);
 				}
 			};
 		} catch (IOException e) {
