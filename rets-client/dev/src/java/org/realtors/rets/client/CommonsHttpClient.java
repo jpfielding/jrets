@@ -131,7 +131,6 @@ public class CommonsHttpClient extends RetsHttpClient {
 					method.setHeader(entry.getKey(), entry.getValue());
 				}
 			}
-			
 			// optional ua-auth stuff here
 			if( this.userAgentPassword != null ){
 			    method.setHeader(RETS_UA_AUTH_HEADER, calculateUaAuthHeader(method,getCookies()));

@@ -11,9 +11,8 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.realtors.rets.common.util.CaseInsensitiveTreeMap;
 
-import com.google.common.io.Closeables;
-
 public class CommonsHttpClientResponse implements RetsHttpResponse {
+
 	private HttpResponse response;
 	private Map<String,String> headers;
 	private Map<String,String> cookies;
@@ -65,28 +64,7 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 			String contentEncoding = StringUtils.trimToEmpty(this.getHeader(CommonsHttpClient.CONTENT_ENCODING)).toLowerCase();
 			boolean gzipped = ArrayUtils.contains(CommonsHttpClient.DEFLATE_ENCODINGS.split(","),contentEncoding);
 			if( gzipped ) inputStream = new GZIPInputStream(inputStream);
-			
-			final InputStream in = inputStream;
-			// the http method close wrapper (necessary)
-			return new InputStream(){
-				@Override
-				public int read() throws IOException {
-					return in.read();
-				}
-				@Override
-				public int read(byte[] b) throws IOException {
-					return in.read(b);
-				}
-				@Override
-				public int read(byte[] b, int off, int len) throws IOException {
-					return in.read(b, off, len);
-				}
-				@Override
-				public void close() throws IOException {
-					// connection release _AFTER_ the input stream has been read
-					Closeables.closeQuietly(in);
-				}
-			};
+			return inputStream;
 		} catch (IOException e) {
 			throw new RetsException(e);
 		}
