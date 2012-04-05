@@ -1,5 +1,7 @@
-This software is a fork of the cart.sourceforge.net (http://cart.sourceforge.net/) project 
-which was licensed under a BSDish license (http://cart.cvs.sourceforge.net/viewvc/cart/cart/LICENSE?view=markup).
+"This product includes software developed by the Center for REALTOR(R) Technology (http://www.crt.realtors.org/)."
 
-This fork and the remaining changes have not yet been licensed, but will likely be publicly offered under GPL 3 terms. 
+This software is a fork of the cart.sourceforge.net (http://cart.sourceforge.net/) project 
+which was licensed under the Apache Software License, Version 1.1 (http://cart.cvs.sourceforge.net/viewvc/cart/cart/LICENSE?view=markup).
+
+This fork and the remaining changes have not yet been licensed, but will likely be publicly offered under Apache Software License Version 2.0.
 
