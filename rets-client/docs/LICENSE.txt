@@ -3,5 +3,6 @@
 This software is a fork of the cart.sourceforge.net (http://cart.sourceforge.net/) project 
 which was licensed under the Apache Software License, Version 1.1 (http://cart.cvs.sourceforge.net/viewvc/cart/cart/LICENSE?view=markup).
 
-This fork and the remaining changes have not yet been licensed, but will likely be publicly offered under Apache Software License Version 2.0.
+This fork and the remaining changes are offered under Apache Software License Version 2.0, 
+http://www.apache.org/licenses/LICENSE-2.0.html.
 
