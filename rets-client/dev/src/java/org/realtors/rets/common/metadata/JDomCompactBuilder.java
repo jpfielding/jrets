@@ -228,7 +228,11 @@ public class JDomCompactBuilder extends MetadataBuilder {
 		final String delimiter = "\t";
 		StringTokenizer tkn = new StringTokenizer(el.getText(), delimiter, true);
 		List list = new LinkedList();
-		tkn.nextToken(); // junk the first element
+		
+		if (tkn.hasMoreElements()) {
+			tkn.nextToken(); // junk the first element
+		}
+		
 		String last = null;
 		while (tkn.hasMoreTokens()) {
 			String next = tkn.nextToken();
