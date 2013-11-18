@@ -47,7 +47,7 @@ public class GetObjectResponse{
 	    this.isMultipart = getType().contains("multipart");
 	    this.inputStream = in;
 	    
-	    boolean isXml = getType().equals("text/xml");
+	    boolean isXml = getType().startsWith("text/xml");
 		boolean containsContentId = headers.containsKey(SingleObjectResponse.CONTENT_ID);
 		// non multipart request that returns text/xml and does NOT have a Context-ID header, must only be a non-zero response code
 		boolean nonMultiPart_xml_withoutContentId = !this.isMultipart && isXml && !containsContentId;
