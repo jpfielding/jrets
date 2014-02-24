@@ -113,7 +113,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 		} catch (UnsupportedEncodingException e) {
 			throw new RetsException(e);
 		}
-		method.setHeader("Content-Type", "application/x-www-url-encoded");
+		method.setHeader("Content-Type", "application/x-www-form-urlencoded");
 		return execute(method, request.getHeaders());
 	}
 

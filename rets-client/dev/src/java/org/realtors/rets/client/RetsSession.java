@@ -12,7 +12,7 @@ import org.realtors.rets.common.metadata.MetadataException;
  */
 public class RetsSession {
 	public static final String METADATA_TABLES = "metadata_tables.xml";
-	public static final String RETS_CLIENT_VERSION = "1.1";
+	public static final String RETS_CLIENT_VERSION = "1.5";
 
 	private static final Log LOG = LogFactory.getLog(RetsSession.class);
 	private static String sUserAgent = "crt-rets-client/" + RETS_CLIENT_VERSION;
