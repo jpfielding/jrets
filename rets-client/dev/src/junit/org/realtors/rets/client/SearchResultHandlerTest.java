@@ -26,7 +26,7 @@ public class SearchResultHandlerTest extends RetsTestCase {
 		SearchResultImpl res = new SearchResultImpl();
 		SearchResultHandler h = new SearchResultHandler(res, invalidReplyCodeHandler, CompactRowPolicy.DEFAULT);
 		InputSource source = new InputSource(new StringReader(input));
-		h.parse(source);
+		h.parse(source, null);
 		return res;
 	}
 

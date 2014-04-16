@@ -1,5 +1,6 @@
 package org.realtors.rets.client;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.realtors.rets.common.metadata.JDomCompactBuilder;
 import org.realtors.rets.common.metadata.JDomStandardBuilder;
 import org.realtors.rets.common.metadata.Metadata;
 import org.realtors.rets.common.metadata.MetadataBuilder;
+import org.xml.sax.InputSource;
 
 /**
  * Implements the basic transport mechanism.  This class deals with the
@@ -109,6 +111,7 @@ public class RetsTransport {
 			retsVersion = RetsVersion.DEFAULT; 
 		this.version = retsVersion;
 		this.client.addDefaultHeader(RetsVersion.RETS_VERSION_HEADER, this.version.toString());
+		//client.doRequest("get", request);
 	}
 
 	/**
@@ -219,7 +222,7 @@ public class RetsTransport {
 	 */
 	public void search(SearchRequest req, SearchResultCollector collector) throws RetsException {
 		RetsHttpResponse httpResponse = doRequest(req);
-		new SearchResultHandler(collector).parse(httpResponse.getInputStream());
+		new SearchResultHandler(collector).parse(httpResponse.getInputStream(), httpResponse.getCharset());
 	}
 
 	/**
@@ -231,7 +234,13 @@ public class RetsTransport {
 	 */
 	public SearchResultSet search(SearchRequest req, SearchResultProcessor processor) throws RetsException {
 		RetsHttpResponse httpResponse = doRequest(req);
-		return processor.parse(httpResponse.getInputStream());
+		InputStream inputStream = httpResponse.getInputStream();
+		InputSource inputSource = new InputSource(inputStream);
+		String charset = httpResponse.getCharset();
+		if (charset != null) {
+		    inputSource.setEncoding(charset);
+		}
+		return processor.parse(inputSource);
 	}
 
 	/**

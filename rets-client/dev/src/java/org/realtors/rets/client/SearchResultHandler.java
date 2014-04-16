@@ -222,8 +222,8 @@ public class SearchResultHandler implements ContentHandler, ErrorHandler{
 		LOG.warn("an error occured while parsing.  Attempting to continue", e);
 	}
 
-	public void parse(InputStream str) throws RetsException {
-		parse(new InputSource(str));
+	public void parse(InputStream str, String charset) throws RetsException {
+		parse(new InputSource(str), charset);
 		try {
 			str.close();
 		} catch (IOException e) {
@@ -231,12 +231,15 @@ public class SearchResultHandler implements ContentHandler, ErrorHandler{
 		}
 	}
 
-	public void parse(InputSource src) throws RetsException {
+	public void parse(InputSource src, String charset) throws RetsException {
 		try {
 			SAXParser p = FACTORY.newSAXParser();
 			XMLReader r = p.getXMLReader();
 			r.setContentHandler(this);
 			r.setErrorHandler(this);
+			if (charset != null) {
+			    src.setEncoding(charset);
+			}
 			r.parse(src);
 		} catch (SAXException se) {
 			if (se.getException() != null && se.getException() instanceof RetsException) {

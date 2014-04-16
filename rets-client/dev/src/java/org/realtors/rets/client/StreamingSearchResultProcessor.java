@@ -73,14 +73,6 @@ public class StreamingSearchResultProcessor implements SearchResultProcessor {
 		return this.mInvalidReplyCodeHandler;
 	}
 
-	public SearchResultSet parse(InputStream reader) {
-		return parse(new InputSource(reader));
-	}
-
-	public SearchResultSet parse(Reader reader) {
-		return parse(new InputSource(reader));
-	}
-
 	public SearchResultSet parse(InputSource source) {
 		StreamingSearchResult result = new StreamingSearchResult(this.mBufferSize, this.mTimeout);
 		StreamingThread thread = new StreamingThread(source, result, this.getInvalidRelyCodeHandler(), this.getCompactRowPolicy());
@@ -107,7 +99,7 @@ class StreamingThread extends Thread {
 	public void run() {
 		SearchResultHandler handler = new SearchResultHandler(this.mResult, this.mInvalidReplyCodeHandler, this.badRowPolicy);
 		try {
-			handler.parse(this.mSource);
+			handler.parse(this.mSource, null);
 		} catch (RetsException e) {
 			this.mResult.setException(e);
 		} catch (Exception e) {
