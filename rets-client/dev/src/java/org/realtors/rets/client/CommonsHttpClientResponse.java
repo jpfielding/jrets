@@ -51,7 +51,12 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 		String contentType = StringUtils.trimToEmpty(this.getHeader(CommonsHttpClient.CONTENT_TYPE)).toLowerCase();
 		String[] split = StringUtils.split(contentType, ";");
 		if (split == null) return null;
-		for (String s : split) if (s.toLowerCase().startsWith("charset=")) return StringUtils.substringAfter(s, "charset=");
+		for (String s : split) {
+		    String trimmed = s.trim();
+		    if (trimmed.toLowerCase().startsWith("charset=")) {
+		        return StringUtils.substringAfter(trimmed, "charset=");
+		    }
+		}
 		return null;
 	}
 

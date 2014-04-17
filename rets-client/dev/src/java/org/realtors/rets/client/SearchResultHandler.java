@@ -223,20 +223,30 @@ public class SearchResultHandler implements ContentHandler, ErrorHandler{
 	}
 
 	public void parse(InputStream str) throws RetsException {
-		parse(new InputSource(str));
+	    parse(str, null);
+	}
+	
+	public void parse(InputStream str, String charset) throws RetsException {
+		parse(new InputSource(str), charset);
 		try {
 			str.close();
 		} catch (IOException e) {
 			throw new RetsException(e);
 		}
 	}
-
 	public void parse(InputSource src) throws RetsException {
+	    parse(src, null);
+	}
+	
+	public void parse(InputSource src, String charset) throws RetsException {
 		try {
 			SAXParser p = FACTORY.newSAXParser();
 			XMLReader r = p.getXMLReader();
 			r.setContentHandler(this);
 			r.setErrorHandler(this);
+    		if (charset != null) {
+    		    src.setEncoding(charset);
+			}
 			r.parse(src);
 		} catch (SAXException se) {
 			if (se.getException() != null && se.getException() instanceof RetsException) {
