@@ -111,7 +111,6 @@ public class RetsTransport {
 			retsVersion = RetsVersion.DEFAULT; 
 		this.version = retsVersion;
 		this.client.addDefaultHeader(RetsVersion.RETS_VERSION_HEADER, this.version.toString());
-		//client.doRequest("get", request);
 	}
 
 	/**

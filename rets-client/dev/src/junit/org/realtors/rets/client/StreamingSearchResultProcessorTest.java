@@ -181,7 +181,7 @@ public class StreamingSearchResultProcessorTest extends TestCase {
 		}
 	}
 
-	/*public void testIONotEatenException() throws RetsException {
+	public void testIONotEatenException() throws RetsException {
 		SearchResultProcessor processor = new StreamingSearchResultProcessor(100);
 
 		IOFailReader ioExceptionStream = new IOFailReader(new StringReader(SearchResultHandlerTest.ALL_TAGS_TEST));
@@ -197,5 +197,5 @@ public class StreamingSearchResultProcessorTest extends TestCase {
 			e.printStackTrace();
 			assertNotNull(e);
 		}
-	}*/
+	}
 }

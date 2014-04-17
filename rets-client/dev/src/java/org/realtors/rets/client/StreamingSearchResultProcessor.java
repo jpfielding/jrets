@@ -80,6 +80,14 @@ public class StreamingSearchResultProcessor implements SearchResultProcessor {
 		return result;
 	}
 
+    public SearchResultSet parse(InputStream src) throws RetsException {
+        return parse(new InputSource(src));
+    }
+
+    public SearchResultSet parse(Reader src) throws RetsException {
+        return parse(new InputSource(src));
+    }
+
 }
 
 class StreamingThread extends Thread {
@@ -99,7 +107,7 @@ class StreamingThread extends Thread {
 	public void run() {
 		SearchResultHandler handler = new SearchResultHandler(this.mResult, this.mInvalidReplyCodeHandler, this.badRowPolicy);
 		try {
-			handler.parse(this.mSource, null);
+			handler.parse(this.mSource);
 		} catch (RetsException e) {
 			this.mResult.setException(e);
 		} catch (Exception e) {
