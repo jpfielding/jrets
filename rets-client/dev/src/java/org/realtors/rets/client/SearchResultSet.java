@@ -1,5 +1,7 @@
 package org.realtors.rets.client;
 
+import java.io.Closeable;
+
 /**
  * Iterator style interface for processing the results
  * of a RETS search a single time.  Information about the
@@ -8,7 +10,7 @@ package org.realtors.rets.client;
  * 
  * @author jrayburn
  */
-public interface SearchResultSet extends SearchResultInfo {
+public interface SearchResultSet extends SearchResultInfo, Closeable {
 	public String[] next() throws RetsException;
 
 	public boolean hasNext() throws RetsException;

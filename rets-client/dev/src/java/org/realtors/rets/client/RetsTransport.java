@@ -255,7 +255,7 @@ public class RetsTransport {
 		}
 		req.setUrl(this.capabilities);
 		RetsHttpResponse httpResponse = this.client.doRequest(this.method, req);
-		GetObjectResponse result = new GetObjectResponse(httpResponse.getHeaders(), httpResponse.getInputStream());
+		GetObjectResponse result = new GetObjectResponse(httpResponse.getHeaders(), httpResponse.getInputStream(), httpResponse);
 		return result;
 	}
 

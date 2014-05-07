@@ -4,14 +4,16 @@
 	<classpathentry kind="src" path="dev/src/junit"/>
 	<classpathentry kind="src" path="dev/src/conf"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/commons-codec-1.3.jar"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/commons-lang-2.4.jar" sourcepath="docs/lib/commons-lang-2.4-sources.zip"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/commons-logging-1.1.1.jar" sourcepath="docs/lib/commons-logging-1.1.1-sources.jar"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/guava-11.0.1.jar" sourcepath="docs/lib/guava-11.0.1-sources.jar"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/httpclient-4.1.1.jar" sourcepath="docs/lib/httpcomponents-client-4.1.1-src.zip"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/httpcore-4.1.jar" sourcepath="docs/lib/httpcomponents-core-4.1-src.zip"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/jdom-1.1.jar" sourcepath="docs/lib/jdom-1.1-sources.zip"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/ext/junit-4.1.jar" sourcepath="docs/lib/junit-4.1-src.zip"/>
-	<classpathentry exported="false" kind="lib" path="dev/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="dev/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="dev/lib/commons-lang-2.4.jar" sourcepath="docs/lib/commons-lang-2.4-sources.zip"/>
+	<classpathentry kind="lib" path="dev/lib/commons-logging-1.1.1.jar" sourcepath="docs/lib/commons-logging-1.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="dev/lib/guava-11.0.1.jar" sourcepath="docs/lib/guava-11.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="dev/lib/jdom-1.1.jar" sourcepath="docs/lib/jdom-1.1-sources.zip"/>
+	<classpathentry kind="lib" path="dev/lib/ext/junit-4.1.jar" sourcepath="docs/lib/junit-4.1-src.zip"/>
+	<classpathentry kind="lib" path="dev/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="/Users/Adam/Downloads/httpclient-4.3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/Adam/Downloads/httpclient-4.3.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/Adam/Downloads/httpcore-4.3.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/Adam/Downloads/httpcore-4.3.1.jar"/>
 	<classpathentry kind="output" path="dist/rets-client-sandbox/classes"/>
 </classpath>

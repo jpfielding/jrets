@@ -1,11 +1,14 @@
 package org.realtors.rets.client;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.LinkedList;
 
 import org.apache.commons.lang.exception.NestableRuntimeException;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.xml.sax.InputSource;
 
 /**
@@ -74,19 +77,19 @@ public class StreamingSearchResultProcessor implements SearchResultProcessor {
 	}
 
 	public SearchResultSet parse(InputSource source) {
-		StreamingSearchResult result = new StreamingSearchResult(this.mBufferSize, this.mTimeout);
+		StreamingSearchResult result = new StreamingSearchResult(this.mBufferSize, this.mTimeout, source.getByteStream());
 		StreamingThread thread = new StreamingThread(source, result, this.getInvalidRelyCodeHandler(), this.getCompactRowPolicy());
 		thread.start();
 		return result;
 	}
 
-    public SearchResultSet parse(InputStream src) throws RetsException {
-        return parse(new InputSource(src));
-    }
+	public SearchResultSet parse(InputStream src) throws RetsException {
+		return parse(new InputSource(src));
+	}
 
-    public SearchResultSet parse(Reader src) throws RetsException {
-        return parse(new InputSource(src));
-    }
+	public SearchResultSet parse(Reader src) throws RetsException {
+		return parse(new InputSource(src));
+	}
 
 }
 
@@ -134,8 +137,10 @@ class StreamingSearchResult implements SearchResultSet, SearchResultCollector {
 	private String[] columns;
 	private int count;
 	private RetsException exception;
+	private Closeable resources;
 
-	public StreamingSearchResult(int bufferSize, int timeout) {
+
+	public StreamingSearchResult(int bufferSize, int timeout, Closeable resources) {
 		if (bufferSize < 1)
 			throw new IllegalArgumentException("[bufferSize=" + bufferSize + "] must be greater than zero");
 		if (timeout < 0)
@@ -148,6 +153,7 @@ class StreamingSearchResult implements SearchResultSet, SearchResultCollector {
 		this.count = -1;
 		this.columns = null;
 		this.exception = null;
+		this.resources = resources;
 	}
 
 	// ------------ Producer Methods
@@ -322,4 +328,14 @@ class StreamingSearchResult implements SearchResultSet, SearchResultCollector {
 		return this.state;
 	}
 
+	public void close() throws IOException {
+		if (this.resources != null){ 
+			try{
+				this.resources.close();
+			}
+			catch(Exception e ){
+				//ignore
+			}
+		}
+	}
 }

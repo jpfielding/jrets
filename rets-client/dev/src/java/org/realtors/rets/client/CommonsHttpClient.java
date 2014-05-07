@@ -12,6 +12,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -136,7 +137,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 			    method.setHeader(RETS_UA_AUTH_HEADER, calculateUaAuthHeader(method,getCookies()));
 			}
 			// try to execute the request
-			HttpResponse response = this.httpClient.execute(method);
+			CloseableHttpResponse response = this.httpClient.execute(method);
 			StatusLine status = response.getStatusLine();
 			if (status.getStatusCode() != HttpStatus.SC_OK) {
 				throw new InvalidHttpStatusException(status);

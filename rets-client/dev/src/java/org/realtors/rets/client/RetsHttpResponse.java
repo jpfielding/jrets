@@ -1,9 +1,10 @@
 package org.realtors.rets.client;
 
 import java.util.Map;
+import java.io.Closeable;
 import java.io.InputStream;
 
-public interface RetsHttpResponse {
+public interface RetsHttpResponse extends Closeable {
 	public int getResponseCode() throws RetsException;
 
 	public Map getHeaders() throws RetsException;
