@@ -41,4 +41,23 @@
 
   </dependencies>
 
+    <build>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <version>2.4.1</version>
+              <configuration>
+                  <tagNameFormat>v@{project.version}</tagNameFormat>
+              </configuration>
+          </plugin>
+      </plugins>
+    </build>
+
+    <scm>
+        <connection>scm:git:ssh://git@github.com/DietSodaSoft/jrets.git</connection>
+        <url>https://github.com/DietSodaSoft/jrets</url>
+        <tag>HEAD</tag>
+    </scm>
+
 </project>
