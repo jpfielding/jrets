@@ -3,7 +3,7 @@
 
   <groupId>org.realtors.rets</groupId>
   <artifactId>jrets</artifactId>
-  <version>1.7.1-SNAPSHOT</version>
+  <version>1.7.1</version>
   <packaging>jar</packaging>
 
   <name>jrets</name>
@@ -64,7 +64,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/DietSodaSoft/jrets.git</connection>
         <url>https://github.com/DietSodaSoft/jrets</url>
-        <tag>HEAD</tag>
+        <tag>v1.7.1</tag>
     </scm>
 
     <distributionManagement>
