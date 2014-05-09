@@ -51,6 +51,14 @@
               </configuration>
           </plugin>
       </plugins>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
     </build>
 
     <scm>
@@ -58,5 +66,15 @@
         <url>https://github.com/DietSodaSoft/jrets</url>
         <tag>HEAD</tag>
     </scm>
+
+    <distributionManagement>
+        <!-- Publish the versioned releases here -->
+        <repository>
+            <id>dss-repo</id>
+            <name>Diet Soda Software maven2 repository</name>
+            <url>scp://dietsodasoft@maven.dietsodasoftware.com/home/dietsodasoft/maven-repo/maven2</url>
+        </repository>
+
+    </distributionManagement>
 
 </project>
