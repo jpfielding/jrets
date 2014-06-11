@@ -1,5 +1,6 @@
 package org.realtors.rets.client;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -220,8 +221,11 @@ public class RetsTransport {
 	 * @param collector the result object that will store the data
 	 */
 	public void search(SearchRequest req, SearchResultCollector collector) throws RetsException {
-		RetsHttpResponse httpResponse = doRequest(req);
-		new SearchResultHandler(collector).parse(httpResponse.getInputStream(), httpResponse.getCharset());
+		try (RetsHttpResponse httpResponse = doRequest(req)) {
+			new SearchResultHandler(collector).parse(httpResponse.getInputStream(), httpResponse.getCharset());
+		} catch (IOException e) {
+			throw new RetsException(e);
+		}
 	}
 
 	/**
