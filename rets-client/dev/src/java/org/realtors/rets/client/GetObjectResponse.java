@@ -20,18 +20,22 @@ public class GetObjectResponse implements Closeable {
 	private static final int DEFAULT_BUFFER_SIZE = 8192;
 
 	private final static GetObjectIterator<SingleObjectResponse> EMPTY_OBJECT_RESPONSE_ITERATOR = new GetObjectIterator<SingleObjectResponse>() {
+		@Override
 		public boolean hasNext() {
 			return false;
 		}
 
+		@Override
 		public SingleObjectResponse next() {
 			throw new NoSuchElementException();
 		}
 
+		@Override
 		public void close() {
 			/* no op */
 		}
 
+		@Override
 		public void remove() {
 			/* no op */
 		}
@@ -180,15 +184,16 @@ public class GetObjectResponse implements Closeable {
 		return this.inputStream;
 	}
 
+	@Override
 	public void close() throws IOException {
-	    if (inputStream != null) { 
-	    	try {inputStream.close();}
+	    if (this.inputStream != null) { 
+	    	try {this.inputStream.close();}
 	    	catch (Exception e ) {//ignore
 	    	}
 	    }
 	    
-	    if (resources != null) { 
-	    	try {resources.close();}
+	    if (this.resources != null) { 
+	    	try {this.resources.close();}
 	    	catch (Exception e ) {//ignore
 	    	}
 	    }
@@ -207,18 +212,22 @@ final class NonMultipartGetObjectResponseIterator implements GetObjectIterator {
 		this.inputStream = in;
 	}
 
+	@Override
 	public void close() throws IOException {
 		this.inputStream.close();
 	}
 
+	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public boolean hasNext() {
 		return !this.exhausted;
 	}
 
+	@Override
 	public SingleObjectResponse next() {
 		if (this.exhausted)
 			throw new NoSuchElementException("stream exhausted");

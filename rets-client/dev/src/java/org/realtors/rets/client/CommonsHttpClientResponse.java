@@ -9,7 +9,6 @@ import java.util.zip.GZIPInputStream;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.realtors.rets.common.util.CaseInsensitiveTreeMap;
 
@@ -85,6 +84,7 @@ public class CommonsHttpClientResponse implements RetsHttpResponse, Closeable {
 		}
 	}
 
+	@Override
 	public void close() {
 		if (this.response != null) {
 			try {
