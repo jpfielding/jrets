@@ -64,7 +64,7 @@
 
 	<target name="refresh" depends="init,deps">
 		<import-deps library="${ant.project.name}" lib="${dist.lib}" classes="${dist.classes}"/>
-		<build src="java" lib="${dist.lib}" library="${ant.project.name}" classes="${dist.classes}"/>
+		<build src="main/java" lib="${dist.lib}" library="${ant.project.name}" classes="${dist.classes}"/>
 		<build src="junit" lib="${dist.lib}" library="${ant.project.name}" classes="${dist.classes}"/>
 	</target>
 

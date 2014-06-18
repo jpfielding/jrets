@@ -50,7 +50,7 @@
 	<macrodef name="build">
 	    <attribute name="library"/>
 	    <attribute name="lib"/>
-	    <attribute name="src" default="java"/>
+	    <attribute name="src" default="main/java"/>
 	    <attribute name="suffix" default=""/>
 	    <attribute name="workspace" default="../.."/>
     	<attribute name="classes" default="@{workspace}/@{project}/target/@{library}/classes"/>
@@ -90,7 +90,7 @@
 	<macrodef name="build-library">
 	    <attribute name="library"/>
 	    <attribute name="lib"/>
-	    <attribute name="src" default="java"/>
+	    <attribute name="src" default="main/java"/>
 	    <attribute name="suffix" default=""/>
 	    <attribute name="workspace" default="../.."/>
 	    <attribute name="outputdir" default="@{lib}"/>
