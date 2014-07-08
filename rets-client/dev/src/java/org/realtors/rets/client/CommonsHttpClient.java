@@ -139,6 +139,7 @@ public class CommonsHttpClient extends RetsHttpClient {
 			CloseableHttpResponse response = this.httpClient.execute(method);
 			StatusLine status = response.getStatusLine();
 			if (status.getStatusCode() != HttpStatus.SC_OK) {
+				response.close();
 				throw new InvalidHttpStatusException(status);
 			}
 			return new CommonsHttpClientResponse(response, getCookies());
