@@ -22,10 +22,12 @@ public class SearchResultImpl implements SearchResult, SearchResultCollector {
 		this.complete = false;
 	}
 
+	@Override
 	public void setCount(int count) {
 		this.count = count;
 	}
 
+	@Override
 	public int getCount() {
 		if (this.count > 0) {
 			return this.count;
@@ -33,14 +35,17 @@ public class SearchResultImpl implements SearchResult, SearchResultCollector {
 		return this.rows.size();
 	}
 
+	@Override
 	public void setColumns(String[] columns) {
 		this.columnNames = columns;
 	}
 
+	@Override
 	public String[] getColumns() {
 		return this.columnNames;
 	}
 
+	@Override
 	public boolean addRow(String[] row) {
 		if (row.length > this.columnNames.length) {
 			throw new IllegalArgumentException(String.format("Invalid number of result columns: got %s, expected %s",row.length, this.columnNames.length));
@@ -51,6 +56,7 @@ public class SearchResultImpl implements SearchResult, SearchResultCollector {
 		return this.rows.add(row);
 	}
 
+	@Override
 	public String[] getRow(int idx) {
 		if (idx >= this.rows.size()) {
 			throw new NoSuchElementException();
@@ -58,22 +64,27 @@ public class SearchResultImpl implements SearchResult, SearchResultCollector {
 		return this.rows.get(idx);
 	}
 
+	@Override
 	public Iterator iterator() {
 		return this.rows.iterator();
 	}
 
+	@Override
 	public void setMaxrows() {
 		this.maxRows = true;
 	}
 
+	@Override
 	public boolean isMaxrows() {
 		return this.maxRows;
 	}
 
+	@Override
 	public void setComplete() {
 		this.complete = true;
 	}
 
+	@Override
 	public boolean isComplete() {
 		return this.complete;
 	}
