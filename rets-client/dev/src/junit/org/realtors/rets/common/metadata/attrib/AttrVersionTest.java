@@ -3,7 +3,7 @@ package org.realtors.rets.common.metadata.attrib;
 import org.realtors.rets.common.metadata.AttrType;
 import org.realtors.rets.common.metadata.MetaParseException;
 
-public class AttrVersionTest extends AttrTypeTest {
+public class AttrVersionTest extends BaseAttrTypeTest {
 	@Override
 	protected void setUp() throws Exception {
 		this.mParser = new AttrVersion();

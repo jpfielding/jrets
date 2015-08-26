@@ -2,7 +2,7 @@ package org.realtors.rets.common.metadata.attrib;
 
 import org.realtors.rets.common.metadata.AttrType;
 
-public class AttrPlaintextTest extends AttrTypeTest {
+public class AttrPlaintextTest extends BaseAttrTypeTest {
 	public void testPlaintext() throws Exception {
 		AttrType parser = new AttrPlaintext(0, 10);
 

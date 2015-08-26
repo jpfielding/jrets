@@ -55,7 +55,7 @@
 	    <attribute name="workspace" default="../.."/>
     	<attribute name="classes" default="@{workspace}/@{project}/target/@{library}/classes"/>
 	    <attribute name="project" default="${ant.project.name}"/>
-	    <attribute name="javaversion" default="1.5"/>
+	    <attribute name="javaversion" default="1.8"/>
 	    <attribute name="message" default="Building @{library} @{src}"/>
 	    <sequential>
 	    	<echo message="@{message}"/>
@@ -96,7 +96,7 @@
 	    <attribute name="outputdir" default="@{lib}"/>
 	    <attribute name="project" default="${ant.project.name}"/>
     	<attribute name="classes" default="@{workspace}/@{project}/target/@{library}/classes/@{src}"/>
-	    <attribute name="javaversion" default="1.5"/>
+	    <attribute name="javaversion" default="1.8"/>
 	    <sequential>
 			<build library="@{library}" 
 				lib="@{lib}" 

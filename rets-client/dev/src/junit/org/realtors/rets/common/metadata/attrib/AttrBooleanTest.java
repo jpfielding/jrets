@@ -4,7 +4,7 @@ import org.realtors.rets.common.metadata.AttrType;
 import org.realtors.rets.common.metadata.MetaParseException;
 
 public class AttrBooleanTest
-    extends AttrTypeTest
+    extends BaseAttrTypeTest
 {
     public void testBoolean() throws Exception
     {
