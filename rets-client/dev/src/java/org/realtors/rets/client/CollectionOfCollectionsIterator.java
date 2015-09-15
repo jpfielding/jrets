@@ -13,7 +13,8 @@ public class CollectionOfCollectionsIterator implements Iterator {
         hasNext();
     }
 
-    public boolean hasNext() {
+    @Override
+	public boolean hasNext() {
         if( this.mInner != null && this.mInner.hasNext() ) {
             return true;
         }
@@ -26,14 +27,16 @@ public class CollectionOfCollectionsIterator implements Iterator {
         return false;
     }
 
-    public Object next() {
+    @Override
+	public Object next() {
         if ( this.hasNext() ) 
             return this.mInner.next();
 
         throw new NoSuchElementException();
     }
 
-    public void remove() throws UnsupportedOperationException {
+    @Override
+	public void remove() throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 

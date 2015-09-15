@@ -2,7 +2,7 @@ package org.realtors.rets.common.metadata.attrib;
 
 import org.realtors.rets.common.metadata.AttrType;
 
-public class AttrGenericTextTest extends AttrTypeTest {
+public class AttrGenericTextTest extends BaseAttrTypeTest {
 	public void testAttrGeneric() throws Exception {
 		AttrType parser = new AttrGenericText(0, 10, "abcdefg");
 

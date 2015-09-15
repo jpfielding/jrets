@@ -6,7 +6,7 @@ import java.util.TimeZone;
 
 import org.realtors.rets.common.metadata.AttrType;
 
-public class AttrDateTest extends AttrTypeTest {
+public class AttrDateTest extends BaseAttrTypeTest {
 	public void testAttrDate() throws Exception {
 		AttrType parser = new AttrDate();
 

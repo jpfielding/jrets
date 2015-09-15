@@ -2,7 +2,7 @@ package org.realtors.rets.common.metadata.attrib;
 
 import org.realtors.rets.common.metadata.AttrType;
 
-public class AttrEnumTest extends AttrTypeTest {
+public class AttrEnumTest extends BaseAttrTypeTest {
 	public void testEnum() throws Exception {
 		String[] values = { "One", "Two", "Three" };
 		AttrType parser = new AttrEnum(values);

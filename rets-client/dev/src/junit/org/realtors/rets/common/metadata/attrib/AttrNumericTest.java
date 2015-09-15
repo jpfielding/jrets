@@ -2,7 +2,7 @@ package org.realtors.rets.common.metadata.attrib;
 
 import org.realtors.rets.common.metadata.AttrType;
 
-public class AttrNumericTest extends AttrTypeTest {
+public class AttrNumericTest extends BaseAttrTypeTest {
 	public void testNumeric() throws Exception {
 		AttrType parser = new AttrNumeric();
 		assertEquals(Integer.class, parser.getType());

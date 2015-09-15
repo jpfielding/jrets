@@ -15,7 +15,7 @@ import org.realtors.rets.common.metadata.MetaParseException;
  * It's rare you can encapsulate the exception expecting tests, but I can,
  * so, I did.
  */
-public abstract class AttrTypeTest extends MetadataTestCase {
+public abstract class BaseAttrTypeTest extends MetadataTestCase {
 	protected void assertParseException(AttrType attrib, String input) throws Exception {
 		attrib.parse(input,false);
 		try {

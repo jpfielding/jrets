@@ -2,7 +2,7 @@ package org.realtors.rets.common.metadata.attrib;
 
 import org.realtors.rets.common.metadata.AttrType;
 
-public class AttrTextTest extends AttrTypeTest {
+public class AttrTextTest extends BaseAttrTypeTest {
 	public void testAttrText() throws Exception {
 		AttrType parser = new AttrText(0, 10);
 		String[] good = { "\r\n\t", "eabc\rdefg", };

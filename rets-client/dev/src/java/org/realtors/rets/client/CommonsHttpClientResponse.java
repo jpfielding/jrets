@@ -27,26 +27,32 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 		}
 	}
 
+	@Override
 	public int getResponseCode() {
 		return this.response.getStatusLine().getStatusCode();
 	}
 
+	@Override
 	public Map<String,String> getHeaders() {
 		return this.headers;
 	}
 
+	@Override
 	public String getHeader(String header) {
 		return this.headers.get(header);
 	}
 
+	@Override
 	public Map<String,String> getCookies() throws RetsException {
 		return this.cookies;
 	}
 
+	@Override
 	public String getCookie(String cookie) throws RetsException {
 		return this.cookies.get(cookie);
 	}
 
+	@Override
 	public String getCharset() {
 		String contentType = StringUtils.trimToEmpty(this.getHeader(CommonsHttpClient.CONTENT_TYPE)).toLowerCase();
 		String[] split = StringUtils.split(contentType, ";");
@@ -56,6 +62,7 @@ public class CommonsHttpClientResponse implements RetsHttpResponse {
 	}
 
 	/**  using this mess to provide logging, gzipping and httpmethod closing */
+	@Override
 	public InputStream getInputStream() throws RetsException {
 		try {
 			// get our underlying stream

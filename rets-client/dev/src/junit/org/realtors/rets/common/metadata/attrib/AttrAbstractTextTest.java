@@ -3,7 +3,7 @@ package org.realtors.rets.common.metadata.attrib;
 import org.realtors.rets.common.metadata.AttrType;
 import org.realtors.rets.common.metadata.MetaParseException;
 
-public class AttrAbstractTextTest extends AttrTypeTest {
+public class AttrAbstractTextTest extends BaseAttrTypeTest {
 	@Override
 	protected void setUp() {
 		this.mShort = new AttrAbstractText(1, 10) {
