@@ -13,6 +13,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -105,12 +106,13 @@ public class CommonsHttpClient extends RetsHttpClient {
 		public Supplier<CookieStore> cookieStoreBuilder = Suppliers.memoize(() -> new BasicCookieStore());
 		
 		public Supplier<RequestConfig.Builder> requestConfigBuilder = 
-				Suppliers.memoize(() -> RequestConfig.custom().setCookieSpec(RFC2109).setConnectTimeout(DEFAULT_TIMEOUT));
+				Suppliers.memoize(() -> RequestConfig.custom().setCookieSpec(CookieSpecs.DEFAULT).setConnectTimeout(DEFAULT_TIMEOUT));
 		
 		public Supplier<SocketConfig.Builder> socketConfigBuilder = Suppliers.memoize(() -> SocketConfig.custom().setSoTimeout(DEFAULT_TIMEOUT));
 		
 		public Supplier<PublicSuffixMatcher> publicSuffixMatcher = Suppliers.memoize(() -> PublicSuffixMatcherLoader.getDefault());
 		
+		//	If you need explicit usage of the RFC2109 it is available by setting the cookie policy to the string constant RFC2109 the provider is registered as.	
 		public Registry<CookieSpecProvider> getCookieSpec() {
 			RegistryBuilder registryBuilder = CookieSpecRegistries.createDefaultBuilder(this.publicSuffixMatcher.get());
 			RegistryBuilder.<CookieSpecProvider>create().register(RFC2109, new RFC2109SpecProvider());
