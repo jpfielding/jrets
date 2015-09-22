@@ -84,6 +84,10 @@ public class CommonsHttpClient extends RetsHttpClient {
 			return this.headers.stream().filter(headerItem -> headerItem.getName().equals(header)).findFirst().orElse(null);
 		}
 		
+		public List<Header> getHeaders() {
+			return this.headers;
+		}
+		
 		public Builder setTimeouts(int timeout) {
 			this.socketConfigBuilder.get().setSoTimeout(timeout);
 			this.requestConfigBuilder.get().setConnectTimeout(timeout);
