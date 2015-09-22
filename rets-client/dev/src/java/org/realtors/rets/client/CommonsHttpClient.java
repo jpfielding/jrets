@@ -1,5 +1,6 @@
 package org.realtors.rets.client;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -277,5 +278,16 @@ public class CommonsHttpClient extends RetsHttpClient {
 	@Override
 	public void setUserCredentials(String userName, String password) {
 		this.httpClientBuilder.setUserCredentials(userName, password);
+	}
+	
+	@Override
+	public void close() throws RetsException {
+		if(this.httpClient != null) {
+			try {
+				this.httpClient.close();
+			} catch (IOException e) {
+				throw new RetsException(e);
+			}
+		}
 	}
 }
