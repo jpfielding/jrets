@@ -3,6 +3,7 @@ package org.realtors.rets.client;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
@@ -270,6 +271,12 @@ public class CommonsHttpClient extends RetsHttpClient {
 	
 	protected String getHeaderValue(HttpRequestBase method, String key){
     	Header requestHeader = method.getFirstHeader(key);
+    	if( requestHeader == null ) {
+    		Optional<Header> maybeHeader = this.httpClientBuilder.headers.stream().filter(header -> header.getName().equals(key)).findFirst();
+    		if(maybeHeader.isPresent()) {
+    			requestHeader = maybeHeader.get();
+    		}
+    	}
     	if( requestHeader == null ) return null;
 		return requestHeader.getValue();
     }

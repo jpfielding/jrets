@@ -366,6 +366,7 @@ public class RetsSession {
 	protected void finalize() throws Throwable {
 		try {
 			if( this.sessionId != null ) this.logout();
+			this.close();
 		} finally {
 			super.finalize();
 		}
