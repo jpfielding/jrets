@@ -296,6 +296,14 @@ public class RetsSession {
 			this.setSessionId(null);
 		}
 	}
+	
+	public void close() throws RetsException {
+		try {
+			this.transport.close();
+		} finally {
+			this.setSessionId(null);
+		}
+	}
 
 	/**
 	 * Will perform a search as requested and return a filled
@@ -358,6 +366,7 @@ public class RetsSession {
 	protected void finalize() throws Throwable {
 		try {
 			if( this.sessionId != null ) this.logout();
+			this.close();
 		} finally {
 			super.finalize();
 		}

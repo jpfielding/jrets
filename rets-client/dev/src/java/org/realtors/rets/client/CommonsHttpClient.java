@@ -1,7 +1,9 @@
 package org.realtors.rets.client;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
@@ -81,6 +83,10 @@ public class CommonsHttpClient extends RetsHttpClient {
 		
 		public Header getHeader(String header) {
 			return this.headers.stream().filter(headerItem -> headerItem.getName().equals(header)).findFirst().orElse(null);
+		}
+		
+		public List<Header> getHeaders() {
+			return this.headers;
 		}
 		
 		public Builder setTimeouts(int timeout) {
@@ -265,6 +271,12 @@ public class CommonsHttpClient extends RetsHttpClient {
 	
 	protected String getHeaderValue(HttpRequestBase method, String key){
     	Header requestHeader = method.getFirstHeader(key);
+    	if( requestHeader == null ) {
+    		Optional<Header> maybeHeader = this.httpClientBuilder.headers.stream().filter(header -> header.getName().equals(key)).findFirst();
+    		if(maybeHeader.isPresent()) {
+    			requestHeader = maybeHeader.get();
+    		}
+    	}
     	if( requestHeader == null ) return null;
 		return requestHeader.getValue();
     }
@@ -277,5 +289,16 @@ public class CommonsHttpClient extends RetsHttpClient {
 	@Override
 	public void setUserCredentials(String userName, String password) {
 		this.httpClientBuilder.setUserCredentials(userName, password);
+	}
+	
+	@Override
+	public void close() throws RetsException {
+		if(this.httpClient != null) {
+			try {
+				this.httpClient.close();
+			} catch (IOException e) {
+				throw new RetsException(e);
+			}
+		}
 	}
 }

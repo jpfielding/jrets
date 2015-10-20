@@ -23,4 +23,6 @@ public abstract class RetsHttpClient {
 	 *            should not include the header in requests
 	 */
 	public abstract void addDefaultHeader(String name, String value);
+	
+	public abstract void close() throws RetsException;
 }

@@ -302,5 +302,11 @@ public class RetsTransport {
 		// response will throw an exception if there is an error code
 		return (response != null);
 	}
+	
+	public void close() throws RetsException {
+		if(this.client != null) {
+			this.client.close();
+		}
+	}
 
 }
