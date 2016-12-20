@@ -17,7 +17,8 @@
 	<!--**********************************************************************
                             IMMUTABLE PROPERTIES DEFINTIONS
     ***********************************************************************-->
-	<property name="dist" 				value="${basedir}/../dist"/>
+	<property name="target"  		value="${basedir}/../target"/>
+	<property name="dist" 			value="${basedir}/../dist"/>
 	<property name="dist.sandbox" 		value="${dist}/${ant.project.name}-sandbox"/>
 	<property name="dist.lib" 			value="${dist.sandbox}/lib"/>
 	<!-- junit property stuff -->
@@ -25,12 +26,6 @@
 	<property name="dist.javadoc"    	value="${dist}/javadoc"/>
 	<property name="dist.junit"	 		value="${dist}/junit"/>
 	<property name="dist.junit.xml" 	value="${dist.junit}/xml"/>
-
-	<!-- git version info -->
-	<property prefix="git" file="../../.git/HEAD"/>
-	<basename file="${git.ref}" suffix="true" property="git.branch"/>
-	<loadfile srcfile="../../.git/refs/heads/${git.branch}" property="git.version"/>
-	<substring text="${git.version}" start="0" end="7" property="git.version.abbrev" />
 
 	<!-- dist file version stamp -->
 	<tstamp>
@@ -53,7 +48,8 @@
 	</filterset>
 
 	<target name="clean" description="Removes the output directory">
-		<delete dir="${dist}"/>
+	  <delete dir="${dist}"/>
+	  <delete dir="${target}"/>
 	</target>
 
 	<target name="init">
@@ -69,7 +65,7 @@
 	</target>
 
 	<target name="dist" depends="clean,deps">
-		<import-project-library library="${ant.project.name}" lib="${dist.lib}" classes="${dist.classes}" suffix=".${dist.version.date}.${git.version.abbrev}"/>
+		<import-project-library library="${ant.project.name}" lib="${dist.lib}" classes="${dist.classes}" suffix=".${dist.version.date}"/>
 	</target>
 
 	<!--**********************************************************************

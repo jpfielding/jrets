@@ -181,15 +181,33 @@ public class RetsTransport {
 		if( retsVersion == null && this.strict ) 
 			throw new RetsException(String.format("RETS Version is a required response header, version '%s' is unrecognized",versionHeader));
 		// skip updating the client version if its not set (correctly) by the server
-		if( retsVersion != null ) this.doVersionHeader(retsVersion);
+		//if( retsVersion != null ) this.doVersionHeader(retsVersion);
 
 		LoginResponse response = new LoginResponse(this.capabilities.getLoginUrl());
 
 		String sessionId = retsHttpResponse.getCookie(RETS_SESSION_ID_HEADER);
+		if(sessionId == null){
+			Map<String, String> headers = retsHttpResponse.getHeaders();
+			String cookies = headers.get("Set-Cookie");
+			sessionId = getSessionId(cookies);
+		}
 		response.setSessionId(sessionId);
 		response.setStrict(this.strict);
 		response.parse(retsHttpResponse.getInputStream(), this.version);
 		return response;
+	}
+
+	String getSessionId(String cookies){
+		if(cookies == null  || cookies.length() == 0) return null;
+		String [] stuff = cookies.split(";");
+		for(String s : stuff){
+			if(s.contains(RETS_SESSION_ID_HEADER)){
+				String [] moreStuff = s.split("=");
+				if(moreStuff.length < 2)return null;
+				return moreStuff[1].trim();
+			}
+		}
+		return null;
 	}
 
 	/**
